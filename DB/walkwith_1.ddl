@@ -1,317 +1,309 @@
 
-CREATE SEQUENCE [sequence_store] AS bigint
-START WITH 100
-INCREMENT BY 1
-go
+DROP SEQUENCE sequence_;
 
-CREATE SEQUENCE [sequence_] AS bigint
-INCREMENT BY 1
-go
+CREATE SEQUENCE sequence_
+	INCREMENT BY 1
+	START WITH 100;
 
-CREATE TABLE [Category]
-( 
-	[categoryId]         numeric()  NOT NULL ,
-	[caName]             varchar()  NULL ,
-	[storeCount]         numeric  NULL 
-)
-go
+DROP TABLE RecommendStore CASCADE CONSTRAINTS PURGE;
 
-ALTER TABLE [Category]
-	ADD CONSTRAINT [XPKCategory] PRIMARY KEY  CLUSTERED ([categoryId] ASC)
-go
+DROP TABLE SearchCategory CASCADE CONSTRAINTS PURGE;
 
-CREATE TABLE [LikeList]
-( 
-	[userId]             varchar()  NOT NULL ,
-	[storeId]            numeric  NOT NULL 
-)
-go
+DROP TABLE SearchStore CASCADE CONSTRAINTS PURGE;
 
-ALTER TABLE [LikeList]
-	ADD CONSTRAINT [XPKLikeList] PRIMARY KEY  CLUSTERED ([userId] ASC,[storeId] ASC)
-go
+DROP TABLE PopularStore CASCADE CONSTRAINTS PURGE;
 
-CREATE TABLE [Menu]
-( 
-	[menuId]             numeric  NOT NULL ,
-	[menuName]           varchar()  NULL ,
-	[menuDescrip]        varchar()  NULL ,
-	[mePrice]            numeric()  NULL ,
-	[storeId]            numeric  NOT NULL 
-)
-go
+DROP TABLE LikeList CASCADE CONSTRAINTS PURGE;
 
-ALTER TABLE [Menu]
-	ADD CONSTRAINT [XPKMenu] PRIMARY KEY  CLUSTERED ([menuId] ASC)
-go
+DROP TABLE StoreCategory CASCADE CONSTRAINTS PURGE;
 
-CREATE TABLE [Pet]
-( 
-	[petId]              numeric()  NOT NULL ,
-	[pName]              varchar()  NULL ,
-	[pAge]               numeric  NULL ,
-	[pCategory]          varchar()  NULL ,
-	[pDetailCategory]    varchar()  NULL ,
-	[userId]             varchar()  NOT NULL ,
-	[pNeureting]         bit  NULL ,
-	[pImage]             varchar()  NULL 
-)
-go
+DROP TABLE Category CASCADE CONSTRAINTS PURGE;
 
-ALTER TABLE [Pet]
-	ADD CONSTRAINT [XPKPet] PRIMARY KEY  CLUSTERED ([petId] ASC,[userId] ASC)
-go
+DROP TABLE Reservation CASCADE CONSTRAINTS PURGE;
 
-CREATE TABLE [PopularStore]
-( 
-	[likeCount]          numeric  NULL ,
-	[updateTime]         datetime  NULL ,
-	[storeId]            numeric  NOT NULL ,
-	[starScore]          float  NULL 
-)
-go
+DROP TABLE Pet CASCADE CONSTRAINTS PURGE;
 
-ALTER TABLE [PopularStore]
-	ADD CONSTRAINT [XPKPopularStore] PRIMARY KEY  CLUSTERED ([storeId] ASC)
-go
+DROP TABLE Menu CASCADE CONSTRAINTS PURGE;
 
-CREATE TABLE [RecommendStore]
-( 
-	[userId]             varchar()  NOT NULL ,
-	[storeId]            numeric  NOT NULL ,
-	[recomStore]         varchar()  NULL ,
-	[recomDate]          datetime  NULL 
-)
-go
+DROP TABLE Review CASCADE CONSTRAINTS PURGE;
 
-ALTER TABLE [RecommendStore]
-	ADD CONSTRAINT [XPKRecommendStore] PRIMARY KEY  CLUSTERED ([userId] ASC,[storeId] ASC)
-go
+DROP TABLE Store CASCADE CONSTRAINTS PURGE;
 
-CREATE TABLE [Reservation]
-( 
-	[reservationId]      numeric  NOT NULL ,
-	[resDate]            datetime  NOT NULL ,
-	[resTime]            datetime  NOT NULL ,
-	[userId]             varchar()  NOT NULL ,
-	[storeId]            numeric  NOT NULL 
-)
-go
+DROP TABLE Seller CASCADE CONSTRAINTS PURGE;
 
-ALTER TABLE [Reservation]
-	ADD CONSTRAINT [XPKReservation] PRIMARY KEY  CLUSTERED ([reservationId] ASC,[userId] ASC)
-go
+DROP TABLE Customer CASCADE CONSTRAINTS PURGE;
 
-CREATE TABLE [Review]
-( 
-	[reviewId]           numeric  NOT NULL ,
-	[reContent]          varchar()  NULL ,
-	[starScore]          numeric()  NULL ,
-	[userId]             varchar()  NOT NULL ,
-	[storeId]            numeric  NOT NULL 
-)
-go
+CREATE TABLE Category
+(
+	categoryId           INTEGER  NOT NULL ,
+	caName               VARCHAR2(200)  NULL ,
+	storeCount           INTEGER  NULL 
+);
 
-ALTER TABLE [Review]
-	ADD CONSTRAINT [XPKReview] PRIMARY KEY  CLUSTERED ([reviewId] ASC)
-go
+CREATE UNIQUE INDEX XPKCategory ON Category
+(categoryId   ASC);
 
-CREATE TABLE [SearchCategory]
-( 
-	[searchcId]          numeric  NOT NULL ,
-	[categoryId]         numeric()  NOT NULL ,
-	[userId]             varchar()  NOT NULL 
-)
-go
+ALTER TABLE Category
+	ADD CONSTRAINT  XPKCategory PRIMARY KEY (categoryId);
 
-ALTER TABLE [SearchCategory]
-	ADD CONSTRAINT [XPKSearchCategory] PRIMARY KEY  CLUSTERED ([searchcId] ASC)
-go
+CREATE TABLE Customer
+(
+	userId               VARCHAR2(20)  NOT NULL ,
+	uName                VARCHAR2(200)  NOT NULL ,
+	uPassword            VARCHAR2(200)  NOT NULL ,
+	uPhone               VARCHAR2(20)  NOT NULL ,
+	uMail                VARCHAR2(300)  NOT NULL 
+);
 
-CREATE TABLE [SearchStore]
-( 
-	[searchId]           numeric  NOT NULL ,
-	[searchQuery]        varchar()  NOT NULL ,
-	[storeId]            numeric  NOT NULL ,
-	[userId]             varchar()  NOT NULL 
-)
-go
+CREATE UNIQUE INDEX XPKUser ON Customer
+(userId   ASC);
 
-ALTER TABLE [SearchStore]
-	ADD CONSTRAINT [XPKSearchStore] PRIMARY KEY  CLUSTERED ([searchId] ASC)
-go
+ALTER TABLE Customer
+	ADD CONSTRAINT  XPKUser PRIMARY KEY (userId);
 
-CREATE TABLE [Seller]
-( 
-	[sellerId]           varchar()  NOT NULL ,
-	[seName]             varchar()  NOT NULL ,
-	[sePassword]         varchar()  NOT NULL ,
-	[sePhone]            varchar()  NOT NULL ,
-	[seMail]             varchar()  NOT NULL 
-)
-go
+CREATE TABLE SearchCategory
+(
+	searchcId            INTEGER  NOT NULL ,
+	categoryId           INTEGER  NOT NULL ,
+	userId               VARCHAR2(20)  NOT NULL 
+);
 
-ALTER TABLE [Seller]
-	ADD CONSTRAINT [XPKSeller] PRIMARY KEY  CLUSTERED ([sellerId] ASC)
-go
+CREATE UNIQUE INDEX XPKSearchCategory ON SearchCategory
+(searchcId   ASC);
 
-CREATE TABLE [Store]
-( 
-	[storeId]            numeric  NOT NULL ,
-	[sName]              varchar()  NOT NULL ,
-	[sPhone]             varchar()  NOT NULL ,
-	[sTime]              datetime  NOT NULL ,
-	[sStarScore]         float  NULL ,
-	[sDetailDescription] varchar()  NULL ,
-	[sellerId]           varchar()  NOT NULL ,
-	[openDate]           char(18)  NOT NULL 
-)
-go
+ALTER TABLE SearchCategory
+	ADD CONSTRAINT  XPKSearchCategory PRIMARY KEY (searchcId);
 
-ALTER TABLE [Store]
-	ADD CONSTRAINT [XPKStore] PRIMARY KEY  CLUSTERED ([storeId] ASC)
-go
+CREATE TABLE Pet
+(
+	petId                INTEGER  NOT NULL ,
+	pName                VARCHAR2(200)  NULL ,
+	pAge                 INTEGER  NULL ,
+	pCategory            VARCHAR2(200)  NULL ,
+	pDetailCategory      VARCHAR2(200)  NULL ,
+	userId               VARCHAR2(20)  NOT NULL ,
+	pNeureting           INTEGER  NULL ,
+	pImage               VARCHAR2(500)  NULL 
+);
 
-CREATE TABLE [StoreCategory]
-( 
-	[categoryId]         numeric()  NOT NULL ,
-	[storeId]            numeric  NOT NULL 
-)
-go
+CREATE UNIQUE INDEX XPKPet ON Pet
+(petId   ASC,userId   ASC);
 
-ALTER TABLE [StoreCategory]
-	ADD CONSTRAINT [XPKStoreCategory] PRIMARY KEY  CLUSTERED ([categoryId] ASC,[storeId] ASC)
-go
+ALTER TABLE Pet
+	ADD CONSTRAINT  XPKPet PRIMARY KEY (petId,userId);
 
-CREATE TABLE [User]
-( 
-	[userId]             varchar()  NOT NULL ,
-	[uName]              varchar()  NOT NULL ,
-	[uPassword]          varchar()  NOT NULL ,
-	[uPhone]             varchar()  NOT NULL ,
-	[uMail]              varchar()  NOT NULL 
-)
-go
+CREATE TABLE Seller
+(
+	sellerId             VARCHAR2(20)  NOT NULL ,
+	seName               VARCHAR2(200)  NOT NULL ,
+	sePassword           VARCHAR2(200)  NOT NULL ,
+	sePhone              VARCHAR2(20)  NOT NULL ,
+	seMail               VARCHAR2(300)  NOT NULL 
+);
 
-ALTER TABLE [User]
-	ADD CONSTRAINT [XPKUser] PRIMARY KEY  CLUSTERED ([userId] ASC)
-go
+CREATE UNIQUE INDEX XPKSeller ON Seller
+(sellerId   ASC);
 
+ALTER TABLE Seller
+	ADD CONSTRAINT  XPKSeller PRIMARY KEY (sellerId);
 
-ALTER TABLE [LikeList]
-	ADD CONSTRAINT [R_15] FOREIGN KEY ([userId]) REFERENCES [User]([userId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE TABLE Store
+(
+	storeId              INTEGER  NOT NULL ,
+	sName                VARCHAR2(200)  NOT NULL ,
+	sPhone               VARCHAR2(20)  NOT NULL ,
+	sTime                DATE  NOT NULL ,
+	sStarScore           FLOAT  NULL ,
+	sDetailDescription   VARCHAR2(1000)  NULL ,
+	sellerId             VARCHAR2(20)  NOT NULL ,
+	openDate             TIMESTAMP  NOT NULL 
+);
 
-ALTER TABLE [LikeList]
-	ADD CONSTRAINT [R_16] FOREIGN KEY ([storeId]) REFERENCES [Store]([storeId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE UNIQUE INDEX XPKStore ON Store
+(storeId   ASC);
 
+ALTER TABLE Store
+	ADD CONSTRAINT  XPKStore PRIMARY KEY (storeId);
 
-ALTER TABLE [Menu]
-	ADD CONSTRAINT [R_6] FOREIGN KEY ([storeId]) REFERENCES [Store]([storeId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE TABLE RecommendStore
+(
+	userId               VARCHAR2(20)  NOT NULL ,
+	storeId              INTEGER  NOT NULL ,
+	recomStore           VARCHAR2(500)  NULL ,
+	recomDate            NCLOB  NULL 
+);
 
+CREATE UNIQUE INDEX XPKRecommendStore ON RecommendStore
+(userId   ASC,storeId   ASC);
 
-ALTER TABLE [Pet]
-	ADD CONSTRAINT [R_1] FOREIGN KEY ([userId]) REFERENCES [User]([userId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+ALTER TABLE RecommendStore
+	ADD CONSTRAINT  XPKRecommendStore PRIMARY KEY (userId,storeId);
 
+CREATE TABLE SearchStore
+(
+	searchId             INTEGER  NOT NULL ,
+	searchQuery          VARCHAR2(200)  NOT NULL ,
+	storeId              INTEGER  NOT NULL ,
+	userId               VARCHAR2(20)  NOT NULL 
+);
 
-ALTER TABLE [PopularStore]
-	ADD CONSTRAINT [R_18] FOREIGN KEY ([storeId]) REFERENCES [Store]([storeId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE UNIQUE INDEX XPKSearchStore ON SearchStore
+(searchId   ASC);
 
+ALTER TABLE SearchStore
+	ADD CONSTRAINT  XPKSearchStore PRIMARY KEY (searchId);
 
-ALTER TABLE [RecommendStore]
-	ADD CONSTRAINT [R_19] FOREIGN KEY ([userId]) REFERENCES [User]([userId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE TABLE PopularStore
+(
+	likeCount            INTEGER  NULL ,
+	updateTime           NCLOB  NULL ,
+	storeId              INTEGER  NOT NULL ,
+	starScore            FLOAT  NULL 
+);
 
-ALTER TABLE [RecommendStore]
-	ADD CONSTRAINT [R_20] FOREIGN KEY ([storeId]) REFERENCES [Store]([storeId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE UNIQUE INDEX XPKPopularStore ON PopularStore
+(storeId   ASC);
 
+ALTER TABLE PopularStore
+	ADD CONSTRAINT  XPKPopularStore PRIMARY KEY (storeId);
 
-ALTER TABLE [Reservation]
-	ADD CONSTRAINT [R_2] FOREIGN KEY ([userId]) REFERENCES [User]([userId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE TABLE LikeList
+(
+	userId               VARCHAR2(20)  NOT NULL ,
+	storeId              INTEGER  NOT NULL 
+);
 
-ALTER TABLE [Reservation]
-	ADD CONSTRAINT [R_11] FOREIGN KEY ([storeId]) REFERENCES [Store]([storeId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE UNIQUE INDEX XPKLikeList ON LikeList
+(userId   ASC,storeId   ASC);
 
+ALTER TABLE LikeList
+	ADD CONSTRAINT  XPKLikeList PRIMARY KEY (userId,storeId);
 
-ALTER TABLE [Review]
-	ADD CONSTRAINT [R_10] FOREIGN KEY ([userId]) REFERENCES [User]([userId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE TABLE StoreCategory
+(
+	categoryId           INTEGER  NOT NULL ,
+	storeId              INTEGER  NOT NULL 
+);
 
-ALTER TABLE [Review]
-	ADD CONSTRAINT [R_14] FOREIGN KEY ([storeId]) REFERENCES [Store]([storeId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE UNIQUE INDEX XPKStoreCategory ON StoreCategory
+(categoryId   ASC,storeId   ASC);
 
+ALTER TABLE StoreCategory
+	ADD CONSTRAINT  XPKStoreCategory PRIMARY KEY (categoryId,storeId);
 
-ALTER TABLE [SearchCategory]
-	ADD CONSTRAINT [R_22] FOREIGN KEY ([categoryId]) REFERENCES [Category]([categoryId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE TABLE Reservation
+(
+	reservationId        INTEGER  NOT NULL ,
+	resDate              NCLOB  NOT NULL ,
+	resTime              DATE  NOT NULL ,
+	userId               VARCHAR2(20)  NOT NULL ,
+	storeId              INTEGER  NOT NULL 
+);
 
-ALTER TABLE [SearchCategory]
-	ADD CONSTRAINT [R_23] FOREIGN KEY ([userId]) REFERENCES [User]([userId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE UNIQUE INDEX XPKReservation ON Reservation
+(reservationId   ASC,userId   ASC);
 
+ALTER TABLE Reservation
+	ADD CONSTRAINT  XPKReservation PRIMARY KEY (reservationId,userId);
 
-ALTER TABLE [SearchStore]
-	ADD CONSTRAINT [R_24] FOREIGN KEY ([storeId]) REFERENCES [Store]([storeId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE TABLE Menu
+(
+	menuId               INTEGER  NOT NULL ,
+	menuName             VARCHAR2(200)  NULL ,
+	menuDescrip          VARCHAR2(500)  NULL ,
+	mePrice              INTEGER  NULL ,
+	storeId              INTEGER  NOT NULL 
+);
 
-ALTER TABLE [SearchStore]
-	ADD CONSTRAINT [R_25] FOREIGN KEY ([userId]) REFERENCES [User]([userId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE UNIQUE INDEX XPKMenu ON Menu
+(menuId   ASC);
 
+ALTER TABLE Menu
+	ADD CONSTRAINT  XPKMenu PRIMARY KEY (menuId);
 
-ALTER TABLE [Store]
-	ADD CONSTRAINT [R_3] FOREIGN KEY ([sellerId]) REFERENCES [Seller]([sellerId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+CREATE TABLE Review
+(
+	reviewId             INTEGER  NOT NULL ,
+	reContent            VARCHAR2(1000)  NULL ,
+	starScore            INTEGER  NULL ,
+	userId               VARCHAR2(20)  NOT NULL ,
+	storeId              INTEGER  NOT NULL 
+);
 
+CREATE UNIQUE INDEX XPKReview ON Review
+(reviewId   ASC);
 
-ALTER TABLE [StoreCategory]
-	ADD CONSTRAINT [R_8] FOREIGN KEY ([categoryId]) REFERENCES [Category]([categoryId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+ALTER TABLE Review
+	ADD CONSTRAINT  XPKReview PRIMARY KEY (reviewId);
 
-ALTER TABLE [StoreCategory]
-	ADD CONSTRAINT [R_9] FOREIGN KEY ([storeId]) REFERENCES [Store]([storeId])
-		ON DELETE NO ACTION
-		ON UPDATE NO ACTION
-go
+ALTER TABLE SearchCategory
+	ADD (
+CONSTRAINT R_22 FOREIGN KEY (categoryId) REFERENCES Category (categoryId));
+
+ALTER TABLE SearchCategory
+	ADD (
+CONSTRAINT R_23 FOREIGN KEY (userId) REFERENCES Customer (userId));
+
+ALTER TABLE Pet
+	ADD (
+CONSTRAINT R_1 FOREIGN KEY (userId) REFERENCES Customer (userId));
+
+ALTER TABLE Store
+	ADD (
+CONSTRAINT R_3 FOREIGN KEY (sellerId) REFERENCES Seller (sellerId));
+
+ALTER TABLE RecommendStore
+	ADD (
+CONSTRAINT R_19 FOREIGN KEY (userId) REFERENCES Customer (userId));
+
+ALTER TABLE RecommendStore
+	ADD (
+CONSTRAINT R_20 FOREIGN KEY (storeId) REFERENCES Store (storeId));
+
+ALTER TABLE SearchStore
+	ADD (
+CONSTRAINT R_24 FOREIGN KEY (storeId) REFERENCES Store (storeId) ON DELETE SET NULL);
+
+ALTER TABLE SearchStore
+	ADD (
+CONSTRAINT R_25 FOREIGN KEY (userId) REFERENCES Customer (userId));
+
+ALTER TABLE PopularStore
+	ADD (
+CONSTRAINT R_18 FOREIGN KEY (storeId) REFERENCES Store (storeId));
+
+ALTER TABLE LikeList
+	ADD (
+CONSTRAINT R_15 FOREIGN KEY (userId) REFERENCES Customer (userId));
+
+ALTER TABLE LikeList
+	ADD (
+CONSTRAINT R_16 FOREIGN KEY (storeId) REFERENCES Store (storeId));
+
+ALTER TABLE StoreCategory
+	ADD (
+CONSTRAINT R_8 FOREIGN KEY (categoryId) REFERENCES Category (categoryId));
+
+ALTER TABLE StoreCategory
+	ADD (
+CONSTRAINT R_9 FOREIGN KEY (storeId) REFERENCES Store (storeId));
+
+ALTER TABLE Reservation
+	ADD (
+CONSTRAINT R_2 FOREIGN KEY (userId) REFERENCES Customer (userId));
+
+ALTER TABLE Reservation
+	ADD (
+CONSTRAINT R_11 FOREIGN KEY (storeId) REFERENCES Store (storeId));
+
+ALTER TABLE Menu
+	ADD (
+CONSTRAINT R_6 FOREIGN KEY (storeId) REFERENCES Store (storeId));
+
+ALTER TABLE Review
+	ADD (
+CONSTRAINT R_10 FOREIGN KEY (userId) REFERENCES Customer (userId));
+
+ALTER TABLE Review
+	ADD (
+CONSTRAINT R_14 FOREIGN KEY (storeId) REFERENCES Store (storeId));
