@@ -5,25 +5,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
 
 import util.JDBCUtil;
 
-// 아마 거의 모든 코드에 join이 들어감으로써 사용자명과 가게명이 들어가야 될것 같다.
-
 public class ReservaionDAO {
-    private JDBCUtil jdbcUtil = null;   // JDBCUtil 필드 선언
-    
-    public ReservaionDAO() {               // 생성자 
-        jdbcUtil = new JDBCUtil();      // JDBCUtil 객체 생성
+    private JDBCUtil jdbcUtil = null;
+
+    public ReservaionDAO() {
+        jdbcUtil = new JDBCUtil();
     }
-    
-    
+
     // 예약 추가
     public int addReservation(ReservationDTO reservation) {
         String sql = "INSERT INTO Reservation (reservationId, resDaTi, userId, storeId) VALUES (?, ?, ?, ?)";
-        Object[] parameters = new Object[] {reservation.getReservationId(), reservation.getResDaTi(), reservation.getUserId(), reservation.getStoreId()};
+        Object[] parameters = new Object[] {reservation.getReservationId(), Date.valueOf(reservation.getResDaTi()), reservation.getUserId(), reservation.getStoreId()};
 
-        jdbcUtil.setSqlAndParameters(sql, parameters);   // JDBCUtil에 query 설정
+        jdbcUtil.setSqlAndParameters(sql, parameters);
 
         try {
             int result = jdbcUtil.executeUpdate();
@@ -59,13 +57,13 @@ public class ReservaionDAO {
 
         return 0;
     }
-    
-    // 사용자 ID로 예약 수정 --> DB 전체 수정 + 비고 라인 추가(DB로) --> customer
-    public int updateReservationByUser(String userId, Date newDate) {
-        StringBuilder query = new StringBuilder();
-        query.append("UPDATE Reservation SET resDaTi = ? WHERE userId = ?");
 
-        Object[] parameters = new Object[] {newDate, userId};
+    // 사용자 ID로 예약 수정 --> DB 전체 수정 + 비고 라인 추가(DB로) --> customer + 얘 한번 확인하기
+    public int updateReservationByUser(String userId, LocalDate newDate, String comment) {
+        StringBuilder query = new StringBuilder();
+        query.append("UPDATE Reservation SET resDaTi = ?, comment = ? WHERE userId = ?");
+
+        Object[] parameters = new Object[] {Date.valueOf(newDate), comment, userId};
 
         jdbcUtil.setSqlAndParameters(query.toString(), parameters);
 
@@ -81,12 +79,16 @@ public class ReservaionDAO {
         }
 
         return 0;
-    }
+    } // 얘 다시 확인
 
-    // 사용자 ID로 예약 찾기 + Customer랑 Store join해서 이름 출력해야 됨 --> customer
+    // 사용자 ID로 예약 찾기
     public List<ReservationDTO> findReservationsByUser(String userId) {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT * FROM Reservation WHERE userId = ?");
+        query.append("SELECT r.*, c.uName, s.sName ");
+        query.append("FROM Reservation r ");
+        query.append("JOIN Customer c ON r.userId = c.userId ");
+        query.append("JOIN Store s ON r.storeId = s.storeId ");
+        query.append("WHERE r.userId = ?");
 
         Object[] parameters = new Object[] {userId};
         jdbcUtil.setSqlAndParameters(query.toString(), parameters);
@@ -94,44 +96,16 @@ public class ReservaionDAO {
         List<ReservationDTO> reservationList = new ArrayList<>();
 
         try {
-            ResultSet rs = jdbcUtil.executeQuery();   // SELECT 문 실행
-            while (rs.next()) {   // 검색 결과가 있으면
+            ResultSet rs = jdbcUtil.executeQuery();
+            while (rs.next()) {
                 ReservationDTO reservation = new ReservationDTO();
                 reservation.setReservationId(rs.getInt("reservationId"));
-                reservation.setResDaTi(rs.getDate("resDaTi"));
+                reservation.setResDaTi(rs.getDate("resDaTi").toLocalDate());
                 reservation.setUserId(rs.getString("userId"));
                 reservation.setStoreId(rs.getInt("storeId"));
-
-                reservationList.add(reservation);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            jdbcUtil.close();
-        }
-
-        return reservationList;
-    }
-
-    // 가게 ID로 예약 찾기 + Customer랑 Store join해서 이름 출력해야 됨 --> seller
-    public List<ReservationDTO> findReservationsByStore(int storeId) {
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT * FROM Reservation WHERE storeId = ?");
-
-        Object[] parameters = new Object[] {storeId};
-        jdbcUtil.setSqlAndParameters(query.toString(), parameters);
-
-        List<ReservationDTO> reservationList = new ArrayList<>();
-
-        try {
-            ResultSet rs = jdbcUtil.executeQuery();   // SELECT 문 실행
-            while (rs.next()) {   // 검색 결과가 있으면
-                ReservationDTO reservation = new ReservationDTO();
-                reservation.setReservationId(rs.getInt("reservationId"));
-                reservation.setResDaTi(rs.getDate("resDaTi"));
-                reservation.setUserId(rs.getString("userId"));
-                reservation.setStoreId(rs.getInt("storeId"));
-
+                reservation.setuName(rs.getString("uName"));  // 사용자 이름
+                reservation.setsName(rs.getString("sName"));  // 가게 이름
+                
                 reservationList.add(reservation);
             }
         } catch (Exception ex) {
@@ -143,19 +117,58 @@ public class ReservaionDAO {
         return reservationList;
     }
     
-    // 사용자별 예약 수 확인 + Customer join해서 이름 출력해야 됨 --> Customer
-    public Map<String, Integer> countReservationsByUser() {
-        String sql = "SELECT userId, COUNT(*) FROM Reservation GROUP BY userId";
-        Map<String, Integer> countMap = new HashMap<>();
+    // 가게 ID로 예약 찾기
+    public List<ReservationDTO> findReservationsByStore(int storeId) {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT r.*, s.sName ");
+        query.append("FROM Reservation r ");
+        query.append("JOIN Store s ON r.storeId = s.storeId ");
+        query.append("WHERE r.storeId = ?");
 
-        jdbcUtil.setSqlAndParameters(sql, null);
+        Object[] parameters = new Object[] {storeId};
+        jdbcUtil.setSqlAndParameters(query.toString(), parameters);
+
+        List<ReservationDTO> reservationList = new ArrayList<>();
+
+        try {
+            ResultSet rs = jdbcUtil.executeQuery();
+            while (rs.next()) {
+                ReservationDTO reservation = new ReservationDTO();
+                reservation.setReservationId(rs.getInt("reservationId"));
+                reservation.setResDaTi(rs.getDate("resDaTi").toLocalDate());
+                reservation.setUserId(rs.getString("userId"));
+                reservation.setStoreId(rs.getInt("storeId"));
+                reservation.setsName(rs.getString("sName"));  // 가게 이름
+                
+                reservationList.add(reservation);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            jdbcUtil.close();
+        }
+
+        return reservationList;
+    }
+
+    // 사용자별 예약 수 확인
+    public Map<String, Integer> countReservationsByUser() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT r.userId, c.uName, COUNT(*) ");
+        sql.append("FROM Reservation r ");
+        sql.append("JOIN Customer c ON r.userId = c.userId ");
+        sql.append("GROUP BY r.userId, c.uName");
+
+        Map<String, Integer> countMap = new HashMap<>();
+        jdbcUtil.setSqlAndParameters(sql.toString(), null);
 
         try {
             ResultSet rs = jdbcUtil.executeQuery();
             while (rs.next()) {
                 String userId = rs.getString("userId");
-                int count = rs.getInt(2);    // COUNT(*)의 결과는 두 번째 컬럼에 들어갑니다.
-                countMap.put(userId, count);
+                String uName = rs.getString("uName");
+                int count = rs.getInt(3);
+                countMap.put(userId + " (" + uName + ")", count);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -166,7 +179,7 @@ public class ReservaionDAO {
         return countMap;
     }
 
-    // 가게별 예약 수 확인+ Store join해서 이름 출력해야 됨 --> seller
+    // 가게별 예약 수 확인
     public Map<Integer, Integer> countReservationsByStore() {
         String sql = "SELECT storeId, COUNT(*) FROM Reservation GROUP BY storeId";
         Map<Integer, Integer> countMap = new HashMap<>();
@@ -188,13 +201,15 @@ public class ReservaionDAO {
 
         return countMap;
     }
-    
-    // 해당 날짜에 누가 예약했는지 확인 + Customer join해서 이름 출력해야 됨 --> seller
-    public List<ReservationDTO> findReservationsByDate(Date date) {
-        StringBuilder sqlSelect = new StringBuilder();
-        sqlSelect.append("SELECT * FROM Reservation WHERE DATE(resDaTi) = ?");
 
-        Object[] parametersSelect = new Object[] {date};
+    // 해당 날짜에 누가 예약했는지 확인
+    public List<ReservationDTO> findReservationsByDate(LocalDate date) {
+        StringBuilder sqlSelect = new StringBuilder();
+        sqlSelect.append("SELECT r.*, c.uName FROM Reservation r ");
+        sqlSelect.append("JOIN Customer c ON r.userId = c.userId ");
+        sqlSelect.append("WHERE DATE(r.resDaTi) = ?");
+
+        Object[] parametersSelect = new Object[] {Date.valueOf(date)};
 
         jdbcUtil.setSqlAndParameters(sqlSelect.toString(), parametersSelect);
 
@@ -206,6 +221,7 @@ public class ReservaionDAO {
                 ReservationDTO reservation = new ReservationDTO();
                 reservation.setReservationId(rsSelect.getInt("reservationId"));
                 reservation.setUserId(rsSelect.getString("userId"));
+                reservation.setuName(rsSelect.getString("uName")); // 사용자 이름 추가
                 reservationList.add(reservation);
             }
 
@@ -219,12 +235,13 @@ public class ReservaionDAO {
         return null;
     }
 
-    // 해당 날짜에 몇 명이 예약했는지 확인 --> seller
-    public int countReservationsByDate(Date date) {
+
+    // 해당 날짜에 몇 명이 예약했는지 확인
+    public int countReservationsByDate(LocalDate date) {
         StringBuilder sqlCount = new StringBuilder();
         sqlCount.append("SELECT COUNT(*) FROM Reservation WHERE DATE(resDaTi) = ?");
 
-        Object[] parametersCount = new Object[] {date};
+        Object[] parametersCount = new Object[] {Date.valueOf(date)};
 
         jdbcUtil.setSqlAndParameters(sqlCount.toString(), parametersCount);
 
@@ -245,22 +262,29 @@ public class ReservaionDAO {
         return 0;
     }
 
-    // 전체 예약 보기+ Customer랑 Store join해서 이름 출력해야 됨
+    // 전체 예약 보기
     public List<ReservationDTO> viewAllReservations() {
-        String sql = "SELECT * FROM Reservation";
+        StringBuilder sqlSelect = new StringBuilder();
+        sqlSelect.append("SELECT r.*, c.uName, s.sName");
+        sqlSelect.append("FROM Reservation r ");
+        sqlSelect.append("JOIN Customer c ON r.userId = c.userId ");
+        sqlSelect.append("JOIN Store s ON r.storeId = s.storeId");
+
+        jdbcUtil.setSqlAndParameters(sqlSelect.toString(), null);
         List<ReservationDTO> reservationList = new ArrayList<>();
 
-        jdbcUtil.setSqlAndParameters(sql, null);
-
         try {
-            ResultSet rs = jdbcUtil.executeQuery();
+            ResultSet rsSelect = jdbcUtil.executeQuery();
 
-            while (rs.next()) {
+            while (rsSelect.next()) {
                 ReservationDTO reservation = new ReservationDTO();
-                reservation.setReservationId(rs.getInt("reservationId"));
-                reservation.setResDaTi(rs.getDate("resDaTi"));
-                reservation.setUserId(rs.getString("userId"));
-                reservation.setStoreId(rs.getInt("storeId"));
+                reservation.setReservationId(rsSelect.getInt("reservationId"));
+                reservation.setResDaTi(rsSelect.getDate("resDaTi").toLocalDate());
+                reservation.setUserId(rsSelect.getString("userId"));
+                reservation.setStoreId(rsSelect.getInt("storeId"));
+                reservation.setuName(rsSelect.getString("uName")); // 사용자 이름 추가
+                reservation.setsName(rsSelect.getString("sName")); // 가게 이름 추가
+                reservation.setComment(rsSelect.getString("comment")); // 코멘트 추가
 
                 reservationList.add(reservation);
             }
@@ -272,4 +296,5 @@ public class ReservaionDAO {
 
         return reservationList;
     }
+
 }
