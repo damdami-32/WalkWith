@@ -13,9 +13,10 @@ public class Store {
 	private Date openDate;
 	private double sStarScore;
 	private String sDescription;
+	private int LikeCount;  // 좋아요 수 필드 추가
 	
 	public Store(int sellerId, int storeId, String sName, String sPhone, Time sTime, Date openDate, double sStarScore,
-			String sDescription) {
+			String sDescription, int LikeCount) {
 		super();
 		this.sellerId = sellerId;
 		this.storeId = storeId;
@@ -25,6 +26,7 @@ public class Store {
 		this.openDate = openDate;
 		this.sStarScore = sStarScore;
 		this.sDescription = sDescription;
+		this.sLikeCount = LikeCount;  // 좋아요 수 초기화
 	}
 
 	public int getSellerId() {
@@ -76,11 +78,19 @@ public class Store {
 		this.sDescription = sDescription;
 	}
 
+	// 좋아요 수 getter, setter 추가
+	public int getLikeCount() {
+		return LikeCount;
+	}
+	public void setLikeCount(int LikeCount) {
+		this.LikeCount = sLikeCount;
+	}
+
 	@Override
 	public String toString() {
 		return "Store [sellerId=" + sellerId + ", storeId=" + storeId + ", sName=" + sName + ", sPhone=" + sPhone
 				+ ", sTime=" + sTime + ", openDate=" + openDate + ", sStarScore=" + sStarScore + ", sDescription="
-				+ sDescription + "]";
+				+ sDescription + ", LikeCount=" + LikeCount + "]";
 	}
 	
 	
