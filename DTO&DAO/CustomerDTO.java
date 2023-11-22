@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CustomerDTO {
     
-    private int userId;
+    private String userId;
     private String uName;
     private String uPassword;
     private String uPhone;
@@ -12,7 +12,7 @@ public class CustomerDTO {
     private List<PetDTO> petList;
     private List<StoreDTO> likeList;
 
-    public CustomerDTO(int userId, String uName, String uPassword, String uPhone, String uMail, List<PetDTO> petList, List<StoreDTO> likeList) {
+    public CustomerDTO(String userId, String uName, String uPassword, String uPhone, String uMail, List<PetDTO> petList, List<StoreDTO> likeList) {
         super();
         this.userId = userId;
         this.uName = uName;
@@ -31,11 +31,11 @@ public class CustomerDTO {
         this.likeList = likeList;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
