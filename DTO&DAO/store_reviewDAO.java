@@ -1,6 +1,9 @@
 package lab4;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.store;
 import model.store;
@@ -17,9 +20,38 @@ public class store_reviewDAO {
  
     //추천 매장 출력
     public List<StoreDTO> selectionStore(string userId){
-    	//좋아요 별점 상위 5개 출력 + if 예약했던 가게가 있다면 예약했던 가게도 같이
+    	//if 예약했던 가게 존재할 시 2개까지 넣기 + 나머지 8개 recommand 매장으로 채우기
+    	// 추천매장 총 10개 반환 -> 필요시 숫자 조정할 것!
     	//customer랑 reservation join해서 storeId 받아오기
+    	//reservation에 fk:(storeId, userId) 존재 -> reservation이랑 store만 join
     	//List<store> 객체 반환
+    	StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM RESERVATION CROSS JOIN STORE WHERE userId = ? ");
+        jdbcUtil.setSqlAndParameters(query.toString(), new Object[] {userId});
+
+        List<StoreDTO> recommandList = new ArrayList<>();
+        try {
+            ResultSet rs = jdbcUtil.executeQuery();
+            while (rs.next() && recommandList.size() < 3) {
+            	StoreDTO recommand = new StoreDTO();
+                recommand.setsName(rs.getStirng("sName"));
+                recommand.setSPhone(rs.getString("sPhone"));
+            	recommand.setSTime(rs.getDate("sTime"));
+            	recommand.setSStarScore(rs.getFloat("sStarScore"));
+            	recommand.setSDetailDescription(rs.getString("sDeailDescription"));
+            	recommand.setSellerId(rs.getDtring("sellerId"));
+            	recommand.setOpenDate(rs.getDate("openDate"));
+            	 
+                recommandList.add(recommand);      
+            }
+            
+            return recommandList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            jdbcUtil.close();
+        }
+    	return null; 
     }
     
     
