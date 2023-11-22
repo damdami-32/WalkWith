@@ -1,10 +1,8 @@
-package lab4;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 
-public class Store {
+public class StoreDTO {
 	private Stirng sellerId;
 	private int storeId;
 	private String sName;
@@ -13,10 +11,10 @@ public class Store {
 	private Date openDate;
 	private double sStarScore;
 	private String sDescription;
-	private int LikeCount;  // 좋아요 수 필드 추가
+	private int likeCount;  // 좋아요 수 필드 추가
 	
 	public Store(Stirng sellerId, int storeId, String sName, String sPhone, Time sTime, Date openDate, double sStarScore,
-			String sDescription, int LikeCount) {
+			String sDescription, int likeCount) {
 		super();
 		this.sellerId = sellerId;
 		this.storeId = storeId;
@@ -26,7 +24,7 @@ public class Store {
 		this.openDate = openDate;
 		this.sStarScore = sStarScore;
 		this.sDescription = sDescription;
-		this.sLikeCount = LikeCount;  // 좋아요 수 초기화
+		this.likeCount = likeCount;  // 좋아요 수 초기화
 	}
 
 	public Stirng getSellerId() {
@@ -80,17 +78,17 @@ public class Store {
 
 	// 좋아요 수 getter, setter 추가
 	public int getLikeCount() {
-		return LikeCount;
+		return likeCount;
 	}
 	public void setLikeCount(int LikeCount) {
-		this.LikeCount = sLikeCount;
+		this.likeCount = likeCount;
 	}
 
 	@Override
 	public String toString() {
 		return "Store [sellerId=" + sellerId + ", storeId=" + storeId + ", sName=" + sName + ", sPhone=" + sPhone
 				+ ", sTime=" + sTime + ", openDate=" + openDate + ", sStarScore=" + sStarScore + ", sDescription="
-				+ sDescription + ", LikeCount=" + LikeCount + "]";
+				+ sDescription + ", likeCount=" + likeCount + "]";
 	}
 	
 	
