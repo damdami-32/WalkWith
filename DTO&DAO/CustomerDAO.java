@@ -18,13 +18,34 @@ public class CustomerDAO {
         jdbcUtil = new JDBCUtil();
     }
 
+    //customer에 fk:StoreId인 StoreDTO List객체(filed 이름 like) 있다고 가정
     public List<StoreDTO> getLikeListByUserId(String userID){
-    	//미완
+    	StringBuilder query = new StringBuilder();
+        query.append("SELECT like FROM CUSTOEMR WHERE userId = ? ");
+
+        jdbcUtil.setSqlAndParameters(query.toString(), new Object[] {userId});
+
+        List<StoreDTO> LikeList = new ArrayList<>();
+        try {
+            ResultSet rs = jdbcUtil.executeQuery();
+            while (rs.next()) {
+            	StoreDTO like = new StoreDTO();
+                like.setsName(rs.getStirng("sName"));
+                like.setSellerId(rs.getString("sellerId"));
+            	
+                LikeList.add(like);                
+            }
+            return LikeList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            jdbcUtil.close();
+        }
     	return null; 
     }
 
     //reservation talbe에 fk:userId가 존재하기 때문에 별도의 join 필요 없을 것으로 사료
-    public int updateReservationByUser(String userId, Date newDate) {
+    public int updateReservationByUserId(String userId, Date newDate) {
         StringBuilder query = new StringBuilder();
         query.append("UPDATE Reservation SET resDaTi = ? WHERE userId = ? ");
 
@@ -181,8 +202,32 @@ public class CustomerDAO {
     }
 
     public List<PetDTO> getAllPets(String userId) {
-    	//미완
-        return new ArrayList<>();
+    	StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM Pet WHERE userId = ? ");
+        jdbcUtil.setSqlAndParameters(query.toString(), new Object[] {userId});
+
+        List<PetDTO> petList = new ArrayList<>();
+        try {
+            ResultSet rs = jdbcUtil.executeQuery();
+            while (rs.next()) {
+                PetDTO pet = new PetDTO();
+                pet.setPId(rs.getString("petId")))
+				pet.setPImage(rs.getString("pImage")))
+				pet.setPName(rs.getString("pName")))
+				pet.setPCategory(rs.getString("pCategory")))
+				pet.setPDetailCa(rs.getString("pDetailCa")))
+				pet.setPNeureting(rs.getString("pNeureting")))
+				pet.setUserId(userId)
+
+				petList.add(pet);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            jdbcUtil.close();
+        }
+
+        return petList;//List<petDTO>객체 반환
     }
 
     public void addPet(PetDTO pet) {
