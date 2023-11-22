@@ -15,6 +15,75 @@ public class store_reviewDAO {
         jdbcUtil = new JDBCUtil();
     }
     
+
+    //**********
+    //추천 매장 출력
+    
+	//if 예약했던 가게 존재할 시 최대 5개까지 넣기 + 나머지 recommand 매장으로 채우기
+	// 추천매장 총 10개 반환 -> 필요시 숫자 조정할 것!
+	// 추천매장은 좋아요 수 기준 상위 10개 뽑았는데 필요시 수정할 것
+	//customer랑 reservation join해서 storeId 받아오기
+	//reservation에 fk:(storeId, userId) 존재 -> reservation이랑 store만 join
+	//List<store> 객체 반환
+    public List<StoreDTO> selectionStore(String userId) {
+        List<StoreDTO> recommandList = new ArrayList<>();
+        try {
+            // 1. 예약한 가게 정보 조회
+            StringBuilder query1 = new StringBuilder();
+            query1.append("SELECT S.* FROM RESERVATION R ");
+            query1.append("INNER JOIN STORE S ON R.storeId = S.storeId ");
+            query1.append("WHERE R.userId = ? ");
+            query1.append("LIMIT 5 "); //최대 5개까지 추천 리스트에 포함
+
+            jdbcUtil.setSqlAndParameters(query1.toString(), new Object[] {userId});
+            ResultSet rs1 = jdbcUtil.executeQuery();
+
+            while (rs1.next()) {
+                StoreDTO recommand = new StoreDTO();
+                recommand.setsName(rs1.getString("sName"));
+                recommand.setSPhone(rs1.getString("sPhone"));
+                recommand.setSTime(rs1.getDate("sTime"));
+                recommand.setSStarScore(rs1.getFloat("sStarScore"));
+                recommand.setSDetailDescription(rs1.getString("sDescription"));
+                recommand.setSellerId(rs1.getString("sellerId"));
+                recommand.setOpenDate(rs1.getDate("openDate"));
+
+                recommandList.add(recommand);
+            }
+
+            // 2. 나머지 추천 매장 조회
+            StringBuilder query2 = new StringBuilder();
+            query2.append("SELECT * FROM STORE ");
+            query2.append("ORDER BY likeCount DESC LIMIT ? ");
+
+            int remainingCount = 10 - recommandList.size(); // 나머지 매장을 채우기 위해 필요한 개수 계산
+            jdbcUtil.setSqlAndParameters(query2.toString(), new Object[] {remainingCount});
+            ResultSet rs2 = jdbcUtil.executeQuery();
+
+            while (rs2.next()) {
+                StoreDTO recommand = new StoreDTO();
+                recommand.setsName(rs2.getString("sName"));
+                recommand.setSPhone(rs2.getString("sPhone"));
+                recommand.setSTime(rs2.getDate("sTime"));
+                recommand.setSStarScore(rs2.getFloat("sStarScore"));
+                recommand.setSDetailDescription(rs2.getString("sDescription"));
+                recommand.setSellerId(rs2.getString("sellerId"));
+                recommand.setOpenDate(rs2.getDate("openDate"));
+
+                recommandList.add(recommand);
+            }
+            return recommandList;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            jdbcUtil.close();
+        }
+
+        return null;
+    }
+    //**********
+    
+    
     public int addMenuItem(MenuDTO menu) throws SQLException {
         String sql = "INSERT INTO MenuItem VALUES (?, ?, ?, ?, ?)";      
         Object[] param = new Object[] {menu.getMenuId(), menu.getStoreId(), 
