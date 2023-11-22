@@ -1,9 +1,11 @@
+package lab4;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 
 public class StoreDTO {
-	private Stirng sellerId;
+	private String sellerId;
 	private int storeId;
 	private String sName;
 	private String sPhone;
@@ -13,7 +15,7 @@ public class StoreDTO {
 	private String sDescription;
 	private int likeCount;  // 좋아요 수 필드 추가
 	
-	public Store(Stirng sellerId, int storeId, String sName, String sPhone, Time sTime, String openDate, double sStarScore,
+	public StoreDTO(String sellerId, int storeId, String sName, String sPhone, Time sTime, String openDate, double sStarScore,
 			String sDescription, int likeCount) {
 		super();
 		this.sellerId = sellerId;
@@ -27,10 +29,10 @@ public class StoreDTO {
 		this.likeCount = likeCount;  // 좋아요 수 초기화
 	}
 
-	public Stirng getSellerId() {
+	public String getSellerId() {
 		return sellerId;
 	}
-	public void setSellerId(Stirng sellerId) {
+	public void setSellerId(String sellerId) {
 		this.sellerId = sellerId;
 	}
 	public int getStoreId() {
