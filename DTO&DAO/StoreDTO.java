@@ -8,12 +8,12 @@ public class StoreDTO {
 	private String sName;
 	private String sPhone;
 	private Time sTime;
-	private Date openDate;
+	private String openDate; // 영업 요일 저장 ex)월,화, 수, 목... 이런 형식 
 	private double sStarScore;
 	private String sDescription;
 	private int likeCount;  // 좋아요 수 필드 추가
 	
-	public Store(Stirng sellerId, int storeId, String sName, String sPhone, Time sTime, Date openDate, double sStarScore,
+	public Store(Stirng sellerId, int storeId, String sName, String sPhone, Time sTime, String openDate, double sStarScore,
 			String sDescription, int likeCount) {
 		super();
 		this.sellerId = sellerId;
@@ -57,10 +57,10 @@ public class StoreDTO {
 	public void setsTime(Time sTime) {
 		this.sTime = sTime;
 	}
-	public Date getOpenDate() {
+	public String getOpenDate() {
 		return openDate;
 	}
-	public void setOpenDate(Date openDate) {
+	public void setOpenDate(String openDate) {
 		this.openDate = openDate;
 	}
 	public double getsStarScore() {
