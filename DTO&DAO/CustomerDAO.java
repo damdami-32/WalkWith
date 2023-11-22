@@ -1,10 +1,10 @@
-package lab3Sol;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,24 +12,21 @@ import util.JDBCUtil;
 
 public class CustomerDAO {
 
-    private JDBCUtil jdbcUtil = null;   // JDBCUtil 필드 선언
-    
-    public CustomerDAO() {               // 생성자 
-        jdbcUtil = new JDBCUtil();      // JDBCUtil 객체 생성
+    private JDBCUtil jdbcUtil = null;
+
+    public CustomerDAO() {
+        jdbcUtil = new JDBCUtil();
     }
-    //userId에 있는 petList 전부 받아오는 메소드
-    public List<PetDTO> getPetListByUserId(String userID){
-    	
-    }
-    //customerId->likelist해서 어떤 가게를 좋아요했는지 받아오기
+
     public List<StoreDTO> getLikeListByUserId(String userID){
-    	
+    	//미완
+    	return null; 
     }
-    
-    // 사용자 ID로 예약 수정 --> DB 전체 수정 + 비고 라인 추가(DB로) --> customer
+
+    //reservation talbe에 fk:userId가 존재하기 때문에 별도의 join 필요 없을 것으로 사료
     public int updateReservationByUser(String userId, Date newDate) {
         StringBuilder query = new StringBuilder();
-        query.append("UPDATE Reservation SET resDaTi = ? WHERE userId = ?");
+        query.append("UPDATE Reservation SET resDaTi = ? WHERE userId = ? ");
 
         Object[] parameters = new Object[] {newDate, userId};
 
@@ -49,11 +46,10 @@ public class CustomerDAO {
         return 0;
     }
 
-
-    // 사용자 ID로 예약 찾기 + Customer랑 Store join해서 이름 출력해야 됨 --> customer
+    //reservation talbe에 fk:userId가 존재하기 때문에 별도의 join 필요 없을 것으로 사료
     public List<ReservationDTO> findReservationsByUserId(String userId) {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT * FROM Reservation WHERE userId = ?");
+        query.append("SELECT * FROM Reservation WHERE userId = ? ");
 
         Object[] parameters = new Object[] {userId};
         jdbcUtil.setSqlAndParameters(query.toString(), parameters);
@@ -61,14 +57,14 @@ public class CustomerDAO {
         List<ReservationDTO> reservationList = new ArrayList<>();
 
         try {
-            ResultSet rs = jdbcUtil.executeQuery();   // SELECT 문 실행
-            while (rs.next()) {   // 검색 결과가 있으면
+            ResultSet rs = jdbcUtil.executeQuery();
+            while (rs.next()) {
                 ReservationDTO reservation = new ReservationDTO();
                 reservation.setReservationId(rs.getInt("reservationId"));
                 reservation.setResDaTi(rs.getDate("resDaTi"));
                 reservation.setUserId(rs.getString("userId"));
                 reservation.setStoreId(rs.getInt("storeId"));
-                
+
                 reservationList.add(reservation);
             }
         } catch (Exception ex) {
@@ -80,10 +76,9 @@ public class CustomerDAO {
         return reservationList;
     }
 
-
-    // 사용자별 예약 수 확인 + Customer join해서 이름 출력해야 됨 --> Customer
+    //reservation talbe에 fk:userId가 존재하기 때문에 별도의 join 필요 없을 것으로 사료
     public Map<String, Integer> countReservationsByUser() {
-        String sql = "SELECT userId, COUNT(*) FROM Reservation GROUP BY userId";
+        String sql = "SELECT userId, COUNT(*) FROM Reservation GROUP BY userId ";
         Map<String, Integer> countMap = new HashMap<>();
 
         jdbcUtil.setSqlAndParameters(sql, null);
@@ -92,7 +87,7 @@ public class CustomerDAO {
             ResultSet rs = jdbcUtil.executeQuery();
             while (rs.next()) {
                 String userId = rs.getString("userId");
-                int count = rs.getInt(2);    // COUNT(*)의 결과는 두 번째 컬럼에 들어갑니다.
+                int count = rs.getInt(2);
                 countMap.put(userId, count);
             }
         } catch (Exception ex) {
@@ -103,48 +98,38 @@ public class CustomerDAO {
 
         return countMap;
     }
-    
-    public CustomerDTO getCustomer(String userId) {
-        // userId를 기반으로 데이터베이스에서 고객을 검색하는 구현
-        StringBuilder query = new StringBuilder();
-        query.append("SELECT * ");
-        query.append("FROM CUSTOMER ");
-        query.append("WHERE userid = ? ");
-        
-        jdbcUtil.setSqlAndParameters(query.toString(), new Object[]{userId}); // JDBCUtil에 질의문과 파라미터 설정   
-        
-        try (Connection connection = jdbcUtil.getConnection()) {
-            String sql = "SELECT * FROM customer_table WHERE userId=? ";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, userId);
 
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    if (resultSet.next()) {
-                        // 데이터베이스에서 고객 정보를 가져와서 CustomerDTO 객체에 설정
-                        String uName = resultSet.getString("uName");
-                        String uPhone = resultSet.getString("uPhone");
-                        String uMail = resultSet.getString("uMail");
-                        List<PetDTO> petList = getPetListByUserId(userId)
-                        // 고객 정보를 담은 CustomerDTO 객체 반환
-                        return new CustomerDTO(userId, uName, null, uPhone, uMail, petList); // 또는 petList를 가져오는 방식으로 변경
-                    }
-                }
+    public CustomerDTO getCustomer(String userId) {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM CUSTOMER ");
+        query.append("WHERE userid = ? ");
+
+        jdbcUtil.setSqlAndParameters(query.toString(), new Object[]{userId});
+
+        try {
+            ResultSet resultSet = jdbcUtil.executeQuery();
+            if (resultSet.next()) {
+                String uName = resultSet.getString("uName");
+                String uPhone = resultSet.getString("uPhone");
+                String uMail = resultSet.getString("uMail");
+                List<PetDTO> petList = getAllPets(userId);
+                return new CustomerDTO(userId, uName, null, uPhone, uMail, petList);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            jdbcUtil.close();       // ResultSet, PreparedStatement, Connection 등 해제
+            jdbcUtil.close();
         }
 
-        return null; // 검색 결과가 없을 경우 null 반환
+        return null;
     }
-    
-    // 데이터베이스에 새로운 고객 추가
+
     public void addCustomer(CustomerDTO customer) {
-        try (Connection connection = JDBCUtil.getConnection()) {
+        try {
+            Connection connection = JDBCUtil.getConnection();
             String sql = "INSERT INTO customer_table (userId, uName, uPassword, uPhone, uMail) VALUES (?, ?, ?, ?, ?) ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, customer.getUserId());
+                preparedStatement.setString(1, customer.getUserId()); // userId는 문자열로 바꾸어주어야 합니다.
                 preparedStatement.setString(2, customer.getuName());
                 preparedStatement.setString(3, customer.getuPassword());
                 preparedStatement.setString(4, customer.getuPhone());
@@ -155,64 +140,55 @@ public class CustomerDAO {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            jdbcUtil.close();       // ResultSet, PreparedStatement, Connection 등 해제
+            jdbcUtil.close();
         }
     }
 
     public void updateCustomer(CustomerDTO customer) {
-        // 데이터베이스에서 기존 고객을 업데이트하는 구현
-        
-        try (Connection connection = JDBCUtil.getConnection()) {
-            String sql = "UPDATE customer_table SET uName=?, uPassword=?, uPhone=?, uMail=? WHERE userId=?";
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "UPDATE customer_table SET uName=?, uPassword=?, uPhone=?, uMail=? WHERE userId=? ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, customer.getuName());
                 preparedStatement.setString(2, customer.getuPassword());
                 preparedStatement.setString(3, customer.getuPhone());
                 preparedStatement.setString(4, customer.getuMail());
-                preparedStatement.setInt(5, customer.getUserId());
+                preparedStatement.setString(5, customer.getUserId());
 
                 preparedStatement.executeUpdate();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            jdbcUtil.close();       // ResultSet, PreparedStatement, Connection 등 해제
+            jdbcUtil.close();
         }
     }
 
-    public void deleteCustomer(int customerId) {
-        // customerId로 데이터베이스에서 고객을 삭제하는 구현
-        // ...
-
-        // JDBCUtil을 사용한 예제 코드:
-        try (Connection connection = JDBCUtil.getConnection()) {
-            String sql = "DELETE FROM customer_table WHERE userId=?";
+    public void deleteCustomer(String userId) {
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "DELETE FROM customer_table WHERE userId=? ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, customerId);
+                preparedStatement.setString(1, userId);
 
                 preparedStatement.executeUpdate();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            jdbcUtil.close();       // ResultSet, PreparedStatement, Connection 등 해제
+            jdbcUtil.close();
         }
     }
 
-    public List<PetDTO> getAllPets() {
-        // 데이터베이스에서 모든 애완동물을 가져오는 구현
-        // ...
-
-        return new ArrayList<>(); // 실제 구현으로 대체하세요
+    public List<PetDTO> getAllPets(String userId) {
+    	//미완
+        return new ArrayList<>();
     }
 
     public void addPet(PetDTO pet) {
-        // 데이터베이스에 새로운 애완동물을 추가하는 구현
-        // ...
-
-        // JDBCUtil을 사용한 예제 코드:
-        try (Connection connection = JDBCUtil.getConnection()) {
-            String sql = "INSERT INTO pet_table (petId, pImage_path, pName, pAge, pCategory, pDetailCa, pNeureting) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "INSERT INTO pet_table (petId, pImage_path, pName, pAge, pCategory, pDetailCa, pNeureting) VALUES (?, ?, ?, ?, ?, ?, ?) ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setInt(1, pet.getPetId());
                 preparedStatement.setString(2, pet.getpImage_path());
@@ -224,20 +200,17 @@ public class CustomerDAO {
 
                 preparedStatement.executeUpdate();
             }
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            jdbcUtil.close();       // ResultSet, PreparedStatement, Connection 등 해제
+            jdbcUtil.close();
         }
     }
 
     public void updatePet(PetDTO pet) {
-        // 데이터베이스에서 기존 애완동물을 업데이트하는 구현
-        // ...
-
-        // JDBCUtil을 사용한 예제 코드:
-        try (Connection connection = JDBCUtil.getConnection()) {
-            String sql = "UPDATE pet_table SET pImage_path=?, pName=?, pAge=?, pCategory=?, pDetailCa=?, pNeureting=? WHERE petId=?";
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "UPDATE pet_table SET pImage_path=?, pName=?, pAge=?, pCategory=?, pDetailCa=?, pNeureting=? WHERE petId=? ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, pet.getpImage_path());
                 preparedStatement.setString(2, pet.getpName());
@@ -252,17 +225,14 @@ public class CustomerDAO {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            jdbcUtil.close();       // ResultSet, PreparedStatement, Connection 등 해제
+            jdbcUtil.close();
         }
     }
 
     public void deletePet(int petId) {
-        // petId로 데이터베이스에서 애완동물을 삭제하는 구현
-        // ...
-
-        // JDBCUtil을 사용한 예제 코드:
-        try (Connection connection = JDBCUtil.getConnection()) {
-            String sql = "DELETE FROM pet_table WHERE petId=?";
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String sql = "DELETE FROM pet_table WHERE petId=? ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setInt(1, petId);
 
@@ -271,7 +241,7 @@ public class CustomerDAO {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            jdbcUtil.close();       // ResultSet, PreparedStatement, Connection 등 해제
+            jdbcUtil.close();
         }
     }
 }
