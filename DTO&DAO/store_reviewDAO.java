@@ -15,9 +15,15 @@ public class store_reviewDAO {
     }
     
  
+    //추천 매장 출력
+    public List<StoreDTO> selectionStore(string userId){
+    	//좋아요 별점 상위 5개 출력 + if 예약했던 가게가 있다면 예약했던 가게도 같이
+    	//customer랑 reservation join해서 storeId 받아오기
+    	//List<store> 객체 반환
+    }
+    
     
     // category를 join해서 받아와야할까요? setCategory에서 설정 후 가져와서 그 결과를 넣는다.
-    
     public int addStore(Store store) throws SQLException {
         String sql = "INSERT INTO store VALUES (?, ?, ?, ?, ?, ?, ?, ?)";      
         Object[] param = new Object[] {store.getsName(), store.getsPhone(), 
