@@ -1,105 +1,98 @@
 package lab4;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 
-public class StoreDTO {
-    private String sName;
-    private String sPhone;
-    private LocalDate sTime;
-    private Float sStarScore;
-    private String sDetailDescription;
-    private String sellerId;
-    private LocalDate openDate;
-    
-    
-    public StoreDTO(String sName, String sPhone, LocalDate sTime, Float sStarScore, String sDetailDescription,
-            String sellerId, LocalDate openDate) {
-        super();
-        this.sName = sName;
-        this.sPhone = sPhone;
-        this.sTime = sTime;
-        this.sStarScore = sStarScore;
-        this.sDetailDescription = sDetailDescription;
-        this.sellerId = sellerId;
-        this.openDate = openDate;
-    }
+public class Store {
+	private Stirng sellerId;
+	private int storeId;
+	private String sName;
+	private String sPhone;
+	private Time sTime;
+	private Date openDate;
+	private double sStarScore;
+	private String sDescription;
+	private int LikeCount;  // 좋아요 수 필드 추가
+	
+	public Store(Stirng sellerId, int storeId, String sName, String sPhone, Time sTime, Date openDate, double sStarScore,
+			String sDescription, int LikeCount) {
+		super();
+		this.sellerId = sellerId;
+		this.storeId = storeId;
+		this.sName = sName;
+		this.sPhone = sPhone;
+		this.sTime = sTime;
+		this.openDate = openDate;
+		this.sStarScore = sStarScore;
+		this.sDescription = sDescription;
+		this.sLikeCount = LikeCount;  // 좋아요 수 초기화
+	}
 
+	public Stirng getSellerId() {
+		return sellerId;
+	}
+	public void setSellerId(Stirng sellerId) {
+		this.sellerId = sellerId;
+	}
+	public int getStoreId() {
+		return storeId;
+	}
+	public void setStoreId(int storeId) {
+		this.storeId = storeId;
+	}
+	public String getsName() {
+		return sName;
+	}
+	public void setsName(String sName) {
+		this.sName = sName;
+	}
+	public String getsPhone() {
+		return sPhone;
+	}
+	public void setsPhone(String sPhone) {
+		this.sPhone = sPhone;
+	}
+	public Time getsTime() {
+		return sTime;
+	}
+	public void setsTime(Time sTime) {
+		this.sTime = sTime;
+	}
+	public Date getOpenDate() {
+		return openDate;
+	}
+	public void setOpenDate(Date openDate) {
+		this.openDate = openDate;
+	}
+	public double getsStarScore() {
+		return sStarScore;
+	}
+	public void setsStarScore(double sStarScore) {
+		this.sStarScore = sStarScore;
+	}
+	public String getsDescription() {
+		return sDescription;
+	}
+	public void setsDescription(String sDescription) {
+		this.sDescription = sDescription;
+	}
 
-    public String getsName() {
-        return sName;
-    }
+	// 좋아요 수 getter, setter 추가
+	public int getLikeCount() {
+		return LikeCount;
+	}
+	public void setLikeCount(int LikeCount) {
+		this.LikeCount = sLikeCount;
+	}
 
-
-    public void setsName(String sName) {
-        this.sName = sName;
-    }
-
-
-    public String getsPhone() {
-        return sPhone;
-    }
-
-
-    public void setsPhone(String sPhone) {
-        this.sPhone = sPhone;
-    }
-
-
-    public LocalDate getsTime() {
-        return sTime;
-    }
-
-
-    public void setsTime(LocalDate sTime) {
-        this.sTime = sTime;
-    }
-
-
-    public Float getsStarScore() {
-        return sStarScore;
-    }
-
-
-    public void setsStarScore(Float sStarScore) {
-        this.sStarScore = sStarScore;
-    }
-
-
-    public String getsDetailDescription() {
-        return sDetailDescription;
-    }
-
-
-    public void setsDetailDescription(String sDetailDescription) {
-        this.sDetailDescription = sDetailDescription;
-    }
-
-
-    public String getSellerId() {
-        return sellerId;
-    }
-
-
-    public void setSellerId(String sellerId) {
-        this.sellerId = sellerId;
-    }
-
-
-    public LocalDate getOpenDate() {
-        return openDate;
-    }
-
-
-    public void setOpenDate(LocalDate openDate) {
-        this.openDate = openDate;
-    }
-
-
-    @Override
-    public String toString() {
-        return "sName=" + sName + ", sPhone=" + sPhone + ", sTime=" + sTime + ", sStarScore=" + sStarScore
-                + ", sDetailDescription=" + sDetailDescription + ", sellerId=" + sellerId + ", openDate=" + openDate;
-    }
-
-    
+	@Override
+	public String toString() {
+		return "Store [sellerId=" + sellerId + ", storeId=" + storeId + ", sName=" + sName + ", sPhone=" + sPhone
+				+ ", sTime=" + sTime + ", openDate=" + openDate + ", sStarScore=" + sStarScore + ", sDescription="
+				+ sDescription + ", LikeCount=" + LikeCount + "]";
+	}
+	
+	
+	
 }
