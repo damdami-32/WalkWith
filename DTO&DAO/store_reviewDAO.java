@@ -46,7 +46,7 @@ public class store_reviewDAO {
                 recommand.setSStarScore(rs1.getFloat("sStarScore"));
                 recommand.setSDetailDescription(rs1.getString("sDescription"));
                 recommand.setSellerId(rs1.getString("sellerId"));
-                recommand.setOpenDate(rs1.getDate("openDate"));
+                recommand.setOpenDate(rs1.getString("openDate"));
 
                 recommandList.add(recommand);
             }
@@ -68,7 +68,7 @@ public class store_reviewDAO {
                 recommand.setSStarScore(rs2.getFloat("sStarScore"));
                 recommand.setSDetailDescription(rs2.getString("sDescription"));
                 recommand.setSellerId(rs2.getString("sellerId"));
-                recommand.setOpenDate(rs2.getDate("openDate"));
+                recommand.setOpenDate(rs2.getString("openDate"));
 
                 recommandList.add(recommand);
             }
