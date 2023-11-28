@@ -2,7 +2,7 @@ package lab4;
 
 import java.sql.Date;
 
-public class ReservationDTO {
+public class ReservationDTO { // store 이미지 추가...?
     private int reservationId;
     private Date resDaTi;  // Date 대신 LocalDate 사용
     private String userId;
