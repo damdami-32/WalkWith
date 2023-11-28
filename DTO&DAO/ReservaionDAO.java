@@ -17,7 +17,7 @@ public class ReservaionDAO {
     }
 
     // 예약 추가
-    public int addReservation(ReservationDTO reservation) {
+    public int addReservation(ReservationDTO reservation) { // 이미지도 추가...?
         String sql = "INSERT INTO Reservation (reservationId, resDaTi, userId, storeId) VALUES (?, ?, ?, ?)";
         Object[] parameters = new Object[] {reservation.getReservationId(), Date.valueOf(reservation.getResDaTi()), reservation.getUserId(), reservation.getStoreId()};
 
