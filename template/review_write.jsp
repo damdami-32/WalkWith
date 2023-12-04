@@ -1,0 +1,266 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Main</title>
+    <style>
+        @font-face {
+            font-family: "museum";
+            src: url("/font/museum.ttf") format("truetype");
+            font-weight: normal;
+        }
+
+        @font-face {
+            font-family: "ebs";
+            src: url("/font/ebs.ttf") format("truetype");
+            font-weight: normal;
+        }
+
+
+        #banner{
+            height: 9rem;
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #user{
+            color: #A99A8F;
+            margin-left: 17px;
+            font-size: 15px;
+            font-family: 'ebs';
+        }
+
+        #left-div{
+            background-image: url("../img/Walkwith-div-left.png");
+            background-repeat: no-repeat;
+            width: 230px;
+            height: 280px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            font-family: 'museum', serif;
+        }
+
+        #menu{
+            list-style: none;
+            color: white;
+            font-size: 1.5rem;
+            padding-top: 10px;
+        }
+
+        #menu > li{
+            padding-bottom: 5px;
+        }
+
+        #right-div{
+            background-image: url("../img/walkwith-div-right.png");
+            width: 1200px;
+            height: 670px;
+            margin-left: 20px;
+            border-radius: 10px;
+            background-size: cover;
+            padding-left: 4rem;
+            padding-right: 25px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            font-family: 'ebs', serif;
+            display: flex;
+        }
+
+        #store{
+            color: #816959;
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        #recommend{
+            font-size: 20px;
+        }
+
+        #more{
+            text-decoration: none;
+            color: #816959;
+            float: right;
+        }
+
+        #second-right{
+            background-image: url("../img/Walkwith-recommandedStore.png");
+            background-size: cover;
+            background-repeat: no-repeat;
+            border-radius: 10px;
+            width: 100%;
+            height: 620px;
+            display: flex;
+            margin-top: 5px;
+            margin-left: 20px;
+            flex-direction: column;
+            padding-left: 15px;
+            padding-right: 15px;
+            justify-content: space-evenly;
+        }
+
+        #store-pic{
+            width: 180px;
+            height: 260px;
+            background-size: cover;
+            border-radius: 10px;
+        }
+
+        #second-left{
+            display: flex;
+            flex-direction: column;
+        }
+
+        #star-div{
+            width: 180px;
+            height: 50px;
+            background-image: url("../img/Walkwith-StarDiv.png");
+            border-radius: 10px;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+        }
+
+        #menu-div {
+            width: 100%;
+            height: 80%;
+            background-size: cover;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        #star-img{
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+
+        #star-score{
+            color: white;
+            font-size: 33px;
+        }
+
+        #store-introduct{
+            background-image: url("../img/Walkwith-MarketIntroduct.png");
+            height: 300px;
+            margin-top: 10px;
+            background-size: cover;
+            border-radius: 10px;
+        }
+
+        #next-button{
+            border: none;
+            background: white;
+        }
+
+        #btn-img{
+            width: 80px;
+        }
+
+        #sr-first{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        #sr-second{
+            background-image: url("../img/Walkwith-menuDiv.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            border-radius: 10px;
+            height: 350px;
+            margin-top: 15px;        
+            padding: 20px;    
+        }
+
+        .res-input{
+            font-size: 20px;
+            color: #222222;
+            border: none;
+            padding-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        .time-set{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-item{
+            color: white;
+            font-size: 30px;
+        }
+
+        #star-write {
+            background-image: url("../img/star.jpg");
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="banner">
+            <img id="banner-img" src="../img/Walkwith-logo.png">
+        </div>
+        <div id="user">
+                <span>Pet°ú ÇÔ²²ÇÏ´Â User´Ô</span>
+        </div>
+        <div class="container" style="display: flex;">
+            <div id="left-div">
+                <ul id="menu">
+                    <li>Home</li>
+                    <li>My Page</li>
+                    <li>Reservation</li>
+                    <li>Review</li>
+                    <li>Market</li>
+                </ul>
+            </div>
+            <div id="right-div">
+                <div id="second-left">
+                    <img id="store-pic" src="../img/Walkwith-market-Image.png"></img>
+                    <div id="star-div">
+                        <img id="star-img" src="../img/Walkwith-Reservation-Star.png">
+                        <span id="star-score">5.0</span>
+                    </div>
+                    <div id="store-introduct"></div>
+                </div>
+                <div id="second-right">
+                    <div id="sr-first">
+                        <div style="display: flex; align-items: center;">
+                            <span class="time-set">
+                                <input type="date" class="res-input">
+                                <img src="../img/Walkwith-DateDiv.png">
+                            </span>
+                            <span class="time-set" style="margin-left : 10px;">
+                                <input type="time" class="res-input">
+                                <img src="../img/Walkwith-TimeDiv.png">
+                            </span>
+                        </div>
+                    <button type="button" id="next-button"><img id="btn-img" src="../img/Walkwith-ReservNext.png"></button>
+                    </div>
+                    <div id="sr-second">
+                        <div class="menu-item">¸®ºä ³»¿ë</div>
+                        <textarea>
+                                
+                        </textarea>
+                    </div>
+                    <img src="../img/star.jpg" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+</body>
+</html>
