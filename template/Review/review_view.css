@@ -166,3 +166,11 @@
     color: #64462D;
     font-size: 30px;
 }
+
+#login {
+        	text-decoration: none;
+            color: #816959;
+            float: right;
+            font-family: 'ebs', serif;
+            font-size: 20px;
+}
