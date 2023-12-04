@@ -1,0 +1,163 @@
+@font-face {
+    font-family: "museum";
+    src: url("../font/국립박물관문화재단클래식L.ttf") format("truetype");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "ebs";
+    src: url("../font/EBS훈민정음새론L.ttf") format("truetype");
+    font-weight: normal;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#banner {
+    height: 9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#user {
+    color: #A99A8F;
+    margin-left: 17px;
+    font-size: 15px;
+    font-family: 'ebs';
+}
+
+.content-container {
+    display: flex;
+}
+
+#left-div {
+    background-image: url("../img/Walkwith-div-left.png");
+    background-repeat: no-repeat;
+    width: 230px;
+    height: 280px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    font-family: 'museum', serif;
+}
+
+#menu {
+    list-style: none;
+    color: white;
+    font-size: 1.5rem;
+    padding-top: 10px;
+}
+
+#menu > li {
+    padding-bottom: 5px;
+}
+
+#right-div {
+	position: relative;
+    background-image: url("../img/walkwith-div-right.png");
+    width: 100%;
+    height: 670px;
+    margin-left: 20px;
+    border-radius: 10px;
+    background-size: cover;
+    padding: 1rem 4rem;
+    font-family: 'ebs', serif;
+    display: block;  
+    font-size: 1em;  
+}
+
+#reser-title {
+    position: absolute;  
+    top: 30px;             
+    left: 50%;          
+    transform: translateX(-50%);  
+}
+
+#review-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 20px;  /* 양쪽 공백을 동일하게 설정 */
+}
+
+.review-list img {
+    width: 100%;
+    height: auto;
+}
+
+#second-left {
+    display: flex;
+    flex-direction: column;
+}
+
+#store-pic {
+    width: 180px;
+    height: 260px;
+    background-size: cover;
+    border-radius: 10px;
+}
+
+#star-div {
+    width: 180px;
+    height: 50px;
+    background-image: url("../img/Walkwith-StarDiv.png");
+    border-radius: 10px;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#next-button {
+    border: none;
+    background: white;
+}
+
+#btn-img {
+    width: 80px;
+}
+
+#sr-first {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+#sr-second {
+    background-image: url("../img/Walkwith-menuDiv.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 10px;
+    height: 350px;
+    margin-top: 15px;
+    padding: 20px;
+}
+
+.res-input {
+    font-size: 20px;
+    color: #222222;
+    border: none;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+
+#sr-third {
+    background-image: url("../img/Walkwith-commentDiv.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 150px;
+    max-width: 100%;
+    border-radius: 20px;
+}
+
+.menu-item {
+    color: #64462D;
+    font-size: 30px;
+}

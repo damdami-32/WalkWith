@@ -1,0 +1,78 @@
+@font-face {
+    font-family: "museum";
+    src: url("../font/국립박물관문화재단클래식L.ttf") format("truetype");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "ebs";
+    src: url("../font/EBS훈민정음새론L.ttf") format("truetype");
+    font-weight: normal;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#user {
+    color: #A99A8F;
+    margin-left: 17px;
+    font-size: 15px;
+    font-family: 'ebs';
+}
+
+#right-div {
+    /* Layout 관련 속성 */
+    width: 100%;
+    height: 70vh;
+    padding: 1rem 4rem;
+    margin-left: 20px;
+
+    /* 시각적 스타일 관련 속성 */
+    background-image: url("../img/walkwith-div-right.png");
+    background-size: cover;
+    border-radius: 10px;
+
+    /* 글꼴 및 글자 크기 관련 속성 */
+    font-family: 'ebs', serif;
+    font-size:120%;
+}
+
+.register-form {
+    width: 500px;
+}
+
+.register-form #text{
+    position: relative;
+}
+
+.register-form #text input{
+    width: 100%;
+    height: 50px;
+    margin-top : 10px;
+    border: 0;
+    border-top: 2px solid rgb(197, 197, 197);
+    box-shadow: 1px 1px 1px 1px rgb(207, 206, 206);
+    padding: 0 0 0 50px;
+}
+
+.register-form #text input:focus{
+    outline: none;
+}
+
+.register-form #btn:active{
+    color:black;
+}
+.register-form #link{
+    position: absolute;
+    right: 25px;
+    top: 37px;
+    text-decoration-line: none;
+    color: rgb(0, 212, 212);
+}
+.register-form #link:visited{
+    color: rgb(0, 212, 212);
+}
+
+
