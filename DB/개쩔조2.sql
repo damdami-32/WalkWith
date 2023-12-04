@@ -84,11 +84,6 @@ CREATE TABLE Seller
 	seMail               VARCHAR2(300)  NOT NULL 
 );
 
--- Seller 테이블 시퀀스 생성
-CREATE SEQUENCE seller_seq
-START WITH 1
-INCREMENT BY 1;
-
 CREATE UNIQUE INDEX XPKSeller ON Seller
 (sellerId   ASC);
 
@@ -104,7 +99,7 @@ CREATE TABLE Store
 	sStarScore           FLOAT  NULL ,
 	sDetailDescription   VARCHAR2(1000)  NULL ,
 	sellerId             VARCHAR2(20)  NOT NULL ,
-	openDate             TIMESTAMP  NOT NULL ,
+	openDate            TIMESTAMP  NOT NULL ,
 	likeCount            INTEGER  NULL ,
 	sImage               VARCHAR(500)  NULL 
 );

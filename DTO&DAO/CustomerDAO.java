@@ -21,7 +21,7 @@ public class CustomerDAO {
     //customer에 fk:StoreId인 StoreDTO List객체(filed 이름 like) 있다고 가정
     public List<StoreDTO> getLikeListByUserId(String userID){
     	StringBuilder query = new StringBuilder();
-        query.append("SELECT like FROM CUSTOEMR WHERE userId = ? ");
+        query.append("SELECT like FROM CUSTOMER WHERE userId = ? ");
 
         jdbcUtil.setSqlAndParameters(query.toString(), new Object[] {userId});
 
@@ -133,8 +133,9 @@ public class CustomerDAO {
                 String uName = resultSet.getString("uName");
                 String uPhone = resultSet.getString("uPhone");
                 String uMail = resultSet.getString("uMail");
+				String uPassword = resultSet.getString("uPassword"); // 수정된 부분
                 List<PetDTO> petList = getAllPets(userId);
-                return new CustomerDTO(userId, uName, null, uPhone, uMail, petList);
+                return new CustomerDTO(userId, uName, uPassword, uPhone, uMail, petList); // 수정된 부분
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -211,7 +212,8 @@ public class CustomerDAO {
             ResultSet rs = jdbcUtil.executeQuery();
             while (rs.next()) {
                 PetDTO pet = new PetDTO();
-                pet.setPId(rs.getString("petId")))
+               pet.setPId(rs.getInt("petId")); // 수정된 부분
+			   pet.setPAge(rs.getInt("pAge")); // 수정된 부분
 				pet.setPImage(rs.getString("pImage")))
 				pet.setPName(rs.getString("pName")))
 				pet.setPCategory(rs.getString("pCategory")))
@@ -230,27 +232,34 @@ public class CustomerDAO {
         return petList;//List<petDTO>객체 반환
     }
 
-    public void addPet(PetDTO pet) {
+    public int addPet(PetDTO pet) { // 시퀀스 pk 사용
         try {
             Connection connection = JDBCUtil.getConnection();
-            String sql = "INSERT INTO pet_table (petId, pImage_path, pName, pAge, pCategory, pDetailCa, pNeureting) VALUES (?, ?, ?, ?, ?, ?, ?) ";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                preparedStatement.setInt(1, pet.getPetId());
-                preparedStatement.setString(2, pet.getpImage_path());
-                preparedStatement.setString(3, pet.getpName());
-                preparedStatement.setInt(4, pet.getpAge());
-                preparedStatement.setString(5, pet.getpCategory());
-                preparedStatement.setString(6, pet.getpDetailCa());
-                preparedStatement.setString(7, pet.getpNeureting());
+            String sql = "INSERT INTO pet_table (petId, pImage_path, pName, pAge, pCategory, pDetailCa, pNeureting) VALUES (pet_id_seq.nextval, ?, ?, ?, ?, ?, ?) ";
+            String key[] = {"petId"};
+            PreparedStatement pstmt = connection.prepareStatement(sql, key);
+            pstmt.setString(1, pet.getpImage_path());
+            pstmt.setString(2, pet.getpName());
+            pstmt.setInt(3, pet.getpAge());
+            pstmt.setString(4, pet.getpCategory());
+            pstmt.setString(5, pet.getpDetailCa());
+            pstmt.setString(6, pet.getpNeureting());
 
-                preparedStatement.executeUpdate();
+            pstmt.executeUpdate();
+            ResultSet rs = pstmt.getGeneratedKeys();
+            int generatedKey = 0;
+            if (rs.next()) {
+                generatedKey = rs.getInt(1);
             }
+            return generatedKey;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             jdbcUtil.close();
         }
+        return 0;
     }
+
 
     public void updatePet(PetDTO pet) {
         try {

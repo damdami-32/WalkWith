@@ -87,24 +87,24 @@ public class store_reviewDAO {
     //**********
     
     
-    public int addMenuItem(MenuDTO menu) throws SQLException {
-        String sql = "INSERT INTO MenuItem VALUES (?, ?, ?, ?, ?)";      
-        Object[] param = new Object[] {menu.getMenuId(), menu.getStoreId(), 
-                menu.getMenuName(), menu.getMenuDescrip(), menu.getMePrice()};             
-        jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil 에 insert문과 매개 변수 설정
-                        
-        try {               
-            int result = jdbcUtil.executeUpdate();  // insert 문 실행
-            return result;
-        } catch (Exception ex) {
-            jdbcUtil.rollback();
-            ex.printStackTrace();
-        } finally {     
-            jdbcUtil.commit();
-            jdbcUtil.close();   // resource 반환
-        }       
-        return 0;           
-    }
+	public int addMenuItem(MenuDTO menu) throws SQLException {
+		String sql = "INSERT INTO MenuItem (storeId, menuName, menuDescrip, mePrice) VALUES (?, ?, ?, ?)";      
+		Object[] param = new Object[] {menu.getStoreId(), menu.getMenuName(), menu.getMenuDescrip(), menu.getMePrice()};             
+		jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil 에 insert문과 매개 변수 설정
+
+		try {               
+			int result = jdbcUtil.executeUpdate();  // insert 문 실행
+			return result;
+		} catch (Exception ex) {
+			jdbcUtil.rollback();
+			ex.printStackTrace();
+		} finally {     
+			jdbcUtil.commit();
+			jdbcUtil.close();   // resource 반환
+		}       
+		return 0;           
+	}
+
      
     public int removeMenuItem(Integer menuId) throws SQLException {
         String sql = "DELETE FROM Menu WHERE menuId=?";      
@@ -140,26 +140,26 @@ public class store_reviewDAO {
         }       
         return 0;           
     }
-    public int addStore(StoreDTO store, Integer categoryId) throws SQLException {
-        String sql = "INSERT INTO store VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";    
-        String category = searchCategory(categoryId);
-        Object[] param = new Object[] {store.getStoreId(), store.getsName(), store.getsPhone(), 
-                store.getsTime(), store.getsStarScore(), store.getsDetailDescription(), 
-                store.getSellerId(), store.getOpenDate(), category, store.getSImage_path()};             
-        jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil 에 insert문과 매개 변수 설정
-                        
-        try {               
-            int result = jdbcUtil.executeUpdate();  // insert 문 실행
-            return result;
-        } catch (Exception ex) {
-            jdbcUtil.rollback();
-            ex.printStackTrace();
-        } finally {     
-            jdbcUtil.commit();
-            jdbcUtil.close();   // resource 반환
-        }       
-        return 0;           
-    }
+	public int addStore(StoreDTO store, Integer categoryId) throws SQLException {
+		String sql = "INSERT INTO store (sName, sPhone, sTime, sStarScore, sDetailDescription, sellerId, openDate, category, sImage_path) "
+				   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";    
+		String category = searchCategory(categoryId);
+		Object[] param = new Object[] {store.getsName(), store.getsPhone(), 
+				store.getsTime(), store.getsStarScore(), store.getsDetailDescription(), 
+				store.getSellerId(), store.getOpenDate(), category, store.getSImage_path()};             
+		jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil 에 insert문과 매개 변수 설정
+		try {               
+			int result = jdbcUtil.executeUpdate();  // insert 문 실행
+			return result;
+		} catch (Exception ex) {
+			jdbcUtil.rollback();
+			ex.printStackTrace();
+		} finally {     
+			jdbcUtil.commit();
+			jdbcUtil.close();   // resource 반환
+		}       
+		return 0;           
+	}
 
     
     public int updateStore(StoreDTO store, Integer categoryId) throws SQLException {
@@ -273,25 +273,25 @@ public class store_reviewDAO {
         return 0;
     }
     
-    public int writeReview(ReviewDTO review) {
-        String sql = "INSERT INTO Review VALUES (?, ?, ?, ?, ?)";  
-        Object[] param = new Object[] {review.getReviewId(), review.getStoreId(), review.getUserId(),review.getReContent(), review.getStarScore()};              
-        jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil 에 insert문과 매개 변수 설정
-        
-        try {               
-            int result = jdbcUtil.executeUpdate();  // delete 문 실행
-            return result;
-        } catch (Exception ex) {
-            jdbcUtil.rollback();
-            ex.printStackTrace();
-        }
-        finally {
-            jdbcUtil.commit();
-            jdbcUtil.close();   // resource 반환
-        }       
-        
-        return 0;       
-    }
+	public int writeReview(ReviewDTO review) {
+		String sql = "INSERT INTO Review (storeId, userId, reContent, starScore) VALUES (?, ?, ?, ?)";  
+		Object[] param = new Object[] {review.getStoreId(), review.getUserId(),review.getReContent(), review.getStarScore()};              
+		jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil 에 insert문과 매개 변수 설정
+
+		try {               
+			int result = jdbcUtil.executeUpdate();  // delete 문 실행
+			return result;
+		} catch (Exception ex) {
+			jdbcUtil.rollback();
+			ex.printStackTrace();
+		}
+		finally {
+			jdbcUtil.commit();
+			jdbcUtil.close();   // resource 반환
+		}       
+
+		return 0;       
+	}
     
     // 그럼 update로 가야하나...
     /*public int writeRating() {
