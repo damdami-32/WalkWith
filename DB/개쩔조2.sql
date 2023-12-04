@@ -26,6 +26,11 @@ CREATE TABLE Category
 	storeCount           INTEGER  NULL 
 );
 
+-- Category 테이블 시퀀스 생성
+CREATE SEQUENCE category_seq
+START WITH 1
+INCREMENT BY 1;
+
 CREATE UNIQUE INDEX XPKCategory ON Category
 (categoryId   ASC);
 
@@ -59,6 +64,11 @@ CREATE TABLE Pet
 	pImage               VARCHAR2(500)  NULL 
 );
 
+-- Pet 테이블 시퀀스 생성
+CREATE SEQUENCE pet_seq
+START WITH 1
+INCREMENT BY 1;
+
 CREATE UNIQUE INDEX XPKPet ON Pet
 (petId   ASC,userId   ASC);
 
@@ -73,6 +83,11 @@ CREATE TABLE Seller
 	sePhone              VARCHAR2(20)  NOT NULL ,
 	seMail               VARCHAR2(300)  NOT NULL 
 );
+
+-- Seller 테이블 시퀀스 생성
+CREATE SEQUENCE seller_seq
+START WITH 1
+INCREMENT BY 1;
 
 CREATE UNIQUE INDEX XPKSeller ON Seller
 (sellerId   ASC);
@@ -94,6 +109,11 @@ CREATE TABLE Store
 	sImage               VARCHAR(500)  NULL 
 );
 
+-- Store 테이블 시퀀스 생성
+CREATE SEQUENCE store_seq
+START WITH 1
+INCREMENT BY 1;
+
 CREATE UNIQUE INDEX XPKStore ON Store
 (storeId   ASC);
 
@@ -106,6 +126,11 @@ CREATE TABLE LikeList
 	storeId              INTEGER  NOT NULL 
 );
 
+-- LikeList 테이블 시퀀스 생성
+CREATE SEQUENCE likelist_seq
+START WITH 1
+INCREMENT BY 1;
+
 CREATE UNIQUE INDEX XPKLikeList ON LikeList
 (userId   ASC,storeId   ASC);
 
@@ -117,6 +142,12 @@ CREATE TABLE StoreCategory
 	categoryId           INTEGER  NOT NULL ,
 	storeId              INTEGER  NOT NULL 
 );
+
+-- StoreCategory 테이블 시퀀스 생성
+CREATE SEQUENCE storecategory_seq
+START WITH 1
+INCREMENT BY 1;
+
 
 CREATE UNIQUE INDEX XPKStoreCategory ON StoreCategory
 (categoryId   ASC,storeId   ASC);
@@ -131,6 +162,12 @@ CREATE TABLE Reservation
 	userId               VARCHAR2(20)  NOT NULL ,
 	storeId              INTEGER  NOT NULL 
 );
+
+-- Reservation 테이블 시퀀스 생성
+CREATE SEQUENCE reservation_seq
+START WITH 1
+INCREMENT BY 1;
+
 
 CREATE UNIQUE INDEX XPKReservation ON Reservation
 (reservationId   ASC);
@@ -147,6 +184,11 @@ CREATE TABLE Menu
 	storeId              INTEGER  NOT NULL 
 );
 
+-- Menu 테이블 시퀀스 생성
+CREATE SEQUENCE menu_seq
+START WITH 1
+INCREMENT BY 1;
+
 CREATE UNIQUE INDEX XPKMenu ON Menu
 (menuId   ASC);
 
@@ -161,6 +203,11 @@ CREATE TABLE Review
 	userId               VARCHAR2(20)  NOT NULL ,
 	storeId              INTEGER  NOT NULL 
 );
+
+-- Review 테이블 시퀀스 생성
+CREATE SEQUENCE review_seq
+START WITH 1
+INCREMENT BY 1;
 
 CREATE UNIQUE INDEX XPKReview ON Review
 (reviewId   ASC);
@@ -215,9 +262,9 @@ CONSTRAINT R_14 FOREIGN KEY (storeId) REFERENCES Store (storeId));
 
 
 -- Category 데이터 입력
-INSERT INTO Category VALUES(1, '카테고리명1', 10);
-INSERT INTO Category VALUES(2, '카테고리명2', 15);
-INSERT INTO Category VALUES(3, '카테고리명3', 5);
+INSERT INTO Category VALUES(category_seq.nextval, '카테고리명1', 10);
+INSERT INTO Category VALUES(category_seq.nextval, '카테고리명2', 15);
+INSERT INTO Category VALUES(category_seq.nextval, '카테고리명3', 5);
 
 -- Customer 데이터 입력
 INSERT INTO Customer VALUES('user1', '이름1', 'password1', '010-1234-5678', 'user1@example.com');
@@ -225,9 +272,9 @@ INSERT INTO Customer VALUES('user2', '이름2', 'password2', '010-2345-6789', 'u
 INSERT INTO Customer VALUES('user3', '이름3', 'password3', '010-3456-7890', 'user3@example.com');
 
 -- Pet 데이터 입력
-INSERT INTO Pet VALUES(1, 'Max', 3, 'Dog', 'Poodle', 'user1', 1, NULL);
-INSERT INTO Pet VALUES(2, 'Bella', 2, 'Cat', 'Persian', 'user2', 0, NULL);
-INSERT INTO Pet VALUES(3, 'Charlie', 1, 'Bird', 'Parrot', 'user3', 1, NULL);
+INSERT INTO Pet VALUES(pet_seq.nextval, 'Max', 3, 'Dog', 'Poodle', 'user1', 1, NULL);
+INSERT INTO Pet VALUES(pet_seq.nextval, 'Bella', 2, 'Cat', 'Persian', 'user2', 0, NULL);
+INSERT INTO Pet VALUES(pet_seq.nextval, 'Charlie', 1, 'Bird', 'Parrot', 'user3', 1, NULL);
 
 -- Seller 데이터 입력
 INSERT INTO Seller VALUES('seller1', '판매자1', 'password1', '010-4567-8901', 'seller1@example.com');
@@ -235,6 +282,7 @@ INSERT INTO Seller VALUES('seller2', '판매자2', 'password2', '010-5678-9012',
 INSERT INTO Seller VALUES('seller3', '판매자3', 'password3', '010-6789-0123', 'seller3@example.com');
 
 -- Store 데이터 입력
-INSERT INTO Store VALUES(1, 'Store1', '02-123-4567', TO_DATE('09:00:00', 'HH24:MI:SS'), 4.5, '상점설명1', 'seller1', CURRENT_TIMESTAMP, 100, NULL);
-INSERT INTO Store VALUES(2, 'Store2', '02-234-5678', TO_DATE('10:00:00', 'HH24:MI:SS'), 4.3, '상점설명2', 'seller2', CURRENT_TIMESTAMP, 200, NULL);
-INSERT INTO Store VALUES(3, 'Store3', '02-345-6789', TO_DATE('11:00:00', 'HH24:MI:SS'), 4.7, '상점설명3', 'seller3', CURRENT_TIMESTAMP, 300, NULL);
+INSERT INTO Store VALUES(store_seq.nextval, 'Store1', '02-123-4567', TO_DATE('09:00:00', 'HH24:MI:SS'), 4.5, '상점설명1', 'seller1', CURRENT_TIMESTAMP, 100, NULL);
+INSERT INTO Store VALUES(store_seq.nextval, 'Store2', '02-234-5678', TO_DATE('10:00:00', 'HH24:MI:SS'), 4.3, '상점설명2', 'seller2', CURRENT_TIMESTAMP, 200, NULL);
+INSERT INTO Store VALUES(store_seq.nextval, 'Store3', '02-345-6789', TO_DATE('11:00:00', 'HH24:MI:SS'), 4.7, '상점설명3', 'seller3', CURRENT_TIMESTAMP, 300, NULL);
+
