@@ -1,12 +1,12 @@
 @font-face {
     font-family: "museum";
-    src: url("../font/국립박물관문화재단클래식L.ttf") format("truetype");
+    src: url("../../font/museum.ttf") format("truetype");
     font-weight: normal;
 }
 
 @font-face {
     font-family: "ebs";
-    src: url("../font/EBS훈민정음새론L.ttf") format("truetype");
+    src: url("../../font/ebs.ttf") format("truetype");
     font-weight: normal;
 }
 
@@ -34,7 +34,7 @@
 }
 
 #left-div {
-    background-image: url("../img/Walkwith-div-left.png");
+    background-image: url("../../img/Walkwith-div-left.png");
     background-repeat: no-repeat;
     width: 230px;
     height: 280px;
@@ -66,7 +66,7 @@
     margin-left: 20px;
 
     /* 배경 및 테두리 관련 속성 */
-    background-image: url("../img/walkwith-div-right.png");
+    background-image: url("../../img/walkwith-div-right.png");
     background-size: cover;
     border-radius: 10px;
 

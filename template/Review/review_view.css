@@ -1,12 +1,12 @@
 @font-face {
     font-family: "museum";
-    src: url("../font/국립박물관문화재단클래식L.ttf") format("truetype");
+    src: url("../../font/museum.ttf") format("truetype");
     font-weight: normal;
 }
 
 @font-face {
     font-family: "ebs";
-    src: url("../font/EBS훈민정음새론L.ttf") format("truetype");
+    src: url("../../font/ebs.ttf") format("truetype");
     font-weight: normal;
 }
 
@@ -34,7 +34,7 @@
 }
 
 #left-div {
-    background-image: url("../img/Walkwith-div-left.png");
+    background-image: url("../../img/Walkwith-div-left.png");
     background-repeat: no-repeat;
     width: 230px;
     height: 280px;
@@ -52,13 +52,18 @@
     padding-top: 10px;
 }
 
+#a{
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+
 #menu > li {
     padding-bottom: 5px;
 }
 
 #right-div {
 	position: relative;
-    background-image: url("../img/walkwith-div-right.png");
+    background-image: url("../../img/walkwith-div-right.png");
     width: 100%;
     height: 670px;
     margin-left: 20px;
@@ -105,7 +110,7 @@
 #star-div {
     width: 180px;
     height: 50px;
-    background-image: url("../img/Walkwith-StarDiv.png");
+    background-image: url("../../img/Walkwith-StarDiv.png");
     border-radius: 10px;
     background-size: cover;
     display: flex;
@@ -130,7 +135,7 @@
 }
 
 #sr-second {
-    background-image: url("../img/Walkwith-menuDiv.png");
+    background-image: url("../../img/Walkwith-menuDiv.png");
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 10px;
@@ -149,7 +154,7 @@
 
 
 #sr-third {
-    background-image: url("../img/Walkwith-commentDiv.png");
+    background-image: url("../../img/Walkwith-commentDiv.png");
     background-repeat: no-repeat;
     background-size: cover;
     height: 150px;
