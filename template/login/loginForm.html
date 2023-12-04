@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <div id="banner" class="d-flex align-items-center justify-content-center">
-            <img id="banner-logo" src="../../img/Walkwith-logo.png" alt="Walkwith Logo">
+            <a href="../home_recommend.html" id="a"><img id="banner-logo" src="../../img/Walkwith-logo.png" alt="Walkwith Logo"></a>
         </div>
         <div class="container d-flex content-container">
             <div id="right-div" class="d-flex justify-content-center align-items-center">
@@ -26,11 +26,11 @@
                     </div>
                      <div>
                         <label><input type="radio" name="userType" value="consumer" checked> 소비자</label>
-                        <label><input type="radio" name="userType" value="seller"> 판매자?</label>
+                        <label><input type="radio" name="userType" value="seller"> 사업자</label>
                     </div>                   
                     <div>
-                       <input type="button" id="btn" style="margin-top: 25px; width: 100%;" value="로그인" onclick="login()" class="btn btn-primary">
-                       <input type="button" id="btn" style="margin-top: 25px; width: 100%;" value="회원가입" onclick="userCreate('/user/register')" class="btn btn-secondary">
+                       <a href="../customer_page.html" id="a"><input type="button" id="btn" style="margin-top: 25px; width: 100%;" value="로그인" onclick="login()" class="btn btn-primary"></a>
+                       <a href="../register/registerForm.html" id="a"><input type="button" id="btn" style="margin-top: 25px; width: 100%;" value="회원가입" onclick="userCreate('/user/register')" class="btn btn-secondary"></a>
                     </div>
                     </div>
                 </form>
