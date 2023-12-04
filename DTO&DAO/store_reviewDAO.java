@@ -47,6 +47,7 @@ public class store_reviewDAO {
                 recommand.setSDetailDescription(rs1.getString("sDescription"));
                 recommand.setSellerId(rs1.getString("sellerId"));
                 recommand.setOpenDate(rs1.getString("openDate"));
+                recommand.setSImage_path(rs1.getString("sImage_path"));
 
                 recommandList.add(recommand);
             }
@@ -69,6 +70,8 @@ public class store_reviewDAO {
                 recommand.setSDetailDescription(rs2.getString("sDescription"));
                 recommand.setSellerId(rs2.getString("sellerId"));
                 recommand.setOpenDate(rs2.getString("openDate"));
+                recommand.setSImage_path(rs2.getString("sImage_path"));
+
 
                 recommandList.add(recommand);
             }
@@ -138,11 +141,11 @@ public class store_reviewDAO {
         return 0;           
     }
     public int addStore(StoreDTO store, Integer categoryId) throws SQLException {
-        String sql = "INSERT INTO store VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";    
+        String sql = "INSERT INTO store VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";    
         String category = searchCategory(categoryId);
         Object[] param = new Object[] {store.getStoreId(), store.getsName(), store.getsPhone(), 
                 store.getsTime(), store.getsStarScore(), store.getsDetailDescription(), 
-                store.getSellerId(), store.getOpenDate(), category};             
+                store.getSellerId(), store.getOpenDate(), category, store.getSImage_path()};             
         jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil 에 insert문과 매개 변수 설정
                         
         try {               
@@ -157,15 +160,16 @@ public class store_reviewDAO {
         }       
         return 0;           
     }
+
     
     public int updateStore(StoreDTO store, Integer categoryId) throws SQLException {
         String sql = "UPDATE store "
-                    + "SET sName=?, sPhone=?, sTime=?, sStarScore=? sDetailDescription=? sellerId=? openDate=? category=?"
-                    + "WHERE storeid=?";
+                    + "SET sName=?, sPhone=?, sTime=?, sStarScore=?, sDetailDescription=?, sellerId=?, openDate=?, category=?, sImage_path=? "
+                    + "WHERE storeId=?";
         String category = searchCategory(categoryId);
         Object[] param = new Object[] {store.getsName(), store.getsPhone(), 
                     store.getsTime(), store.getsStarScore(), store.getsDetailDescription(), 
-                    store.getSellerId(), store.getOpenDate(), category, store.getStoreId()};              
+                    store.getSellerId(), store.getOpenDate(), category, store.getSImage_path(), store.getStoreId()};              
         jdbcUtil.setSqlAndParameters(sql, param);   // JDBCUtil에 update문과 매개 변수 설정
             
         try {               
@@ -181,6 +185,7 @@ public class store_reviewDAO {
         }       
         return 0;
     }
+
     
     public int deleteStore(Integer storeId) throws SQLException {
         String sql = "DELETE FROM Store WHERE storeId=?";      
@@ -200,13 +205,15 @@ public class store_reviewDAO {
     }
     
     public void printStore(Integer storeId) {
-        String sql = "SELECT sName, SPhone, STime, openDate, sStarScore, sDescription, LikeCount"
+        String sql = "SELECT sName, SPhone, STime, openDate, sStarScore, sDescription, LikeCount, sImage_path "
                 + "FROM Store WHERE storeId=?";
         jdbcUtil.setSqlAndParameters(sql, new Object[] {storeId});
         
         try {               
             ResultSet result = jdbcUtil.executeQuery();  
-
+            // 기타 코드들...
+            String imagePath = result.getString("sImage_path");
+            // imagePath를 사용하여 이미지를 출력하거나 사용자에게 제공.
         } catch (Exception ex) {
             jdbcUtil.rollback();
             ex.printStackTrace();
@@ -216,6 +223,7 @@ public class store_reviewDAO {
             jdbcUtil.close();   // resource 반환
         }       
     }
+
     
     public String searchCategory(Integer cateId) {
         String sql = "SELECT caName FROM Category WHERE categoryId=?";
