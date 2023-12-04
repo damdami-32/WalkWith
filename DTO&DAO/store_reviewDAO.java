@@ -46,7 +46,7 @@ public class store_reviewDAO {
                 recommand.setSStarScore(rs1.getFloat("sStarScore"));
                 recommand.setSDetailDescription(rs1.getString("sDescription"));
                 recommand.setSellerId(rs1.getString("sellerId"));
-                recommand.setOpenDate(rs1.getDate("openDate"));
+                recommand.setOpenDate(rs1.getString("openDate"));
 
                 recommandList.add(recommand);
             }
@@ -68,7 +68,7 @@ public class store_reviewDAO {
                 recommand.setSStarScore(rs2.getFloat("sStarScore"));
                 recommand.setSDetailDescription(rs2.getString("sDescription"));
                 recommand.setSellerId(rs2.getString("sellerId"));
-                recommand.setOpenDate(rs2.getDate("openDate"));
+                recommand.setOpenDate(rs2.getString("openDate"));
 
                 recommandList.add(recommand);
             }
@@ -346,6 +346,30 @@ public class store_reviewDAO {
         }       
         return 0;
     } 
+    
+    public void printReiview(String userId) {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT reContent FROM Review JOIN Costomer USING (userId) ");
+        query.append("WHERE userId = ? ");
+        
+        jdbcUtil.setSqlAndParameters(query.toString(), new Object[]{userId});
+        
+        try {
+            ResultSet rs = jdbcUtil.executeQuery();
+            
+            System.out.println("<나의 리뷰>");
+            
+            while (rs.next()) {
+                System.out.println("리뷰 아이디: " + rs.getInt("reviewId"));
+                System.out.println(rs.getString("reContent"));
+                System.out.println();
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        } finally {
+            jdbcUtil.close();
+        }
+    }
     
     /*public int updateRating(Review review) throws SQLException {
         String sql = "UPDATE Review "

@@ -1,9 +1,11 @@
+package lab4;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 
 public class StoreDTO {
-	private Stirng sellerId;
+	private String sellerId;
 	private int storeId;
 	private String sName;
 	private String sPhone;
@@ -12,9 +14,10 @@ public class StoreDTO {
 	private double sStarScore;
 	private String sDescription;
 	private int likeCount;  // 좋아요 수 필드 추가
+	private String sImage_path; // 가게 이미지 추가
 	
-	public Store(Stirng sellerId, int storeId, String sName, String sPhone, Time sTime, String openDate, double sStarScore,
-			String sDescription, int likeCount) {
+	public StoreDTO(String sellerId, int storeId, String sName, String sPhone, Time sTime, String openDate, double sStarScore,
+			String sDescription, int likeCoun, String sImage_path) {
 		super();
 		this.sellerId = sellerId;
 		this.storeId = storeId;
@@ -25,12 +28,13 @@ public class StoreDTO {
 		this.sStarScore = sStarScore;
 		this.sDescription = sDescription;
 		this.likeCount = likeCount;  // 좋아요 수 초기화
+		this.sImage = sImage_path;
 	}
 
-	public Stirng getSellerId() {
+	public String getSellerId() {
 		return sellerId;
 	}
-	public void setSellerId(Stirng sellerId) {
+	public void setSellerId(String sellerId) {
 		this.sellerId = sellerId;
 	}
 	public int getStoreId() {
@@ -82,6 +86,15 @@ public class StoreDTO {
 	}
 	public void setLikeCount(int LikeCount) {
 		this.likeCount = likeCount;
+	}
+	
+	// 가게 이미지 추가
+	public String getsImage_path() {
+		return sImage;
+	}
+
+	public void setsImage_path(String sImage_path) {
+		this.sImage_path = sImage_path;
 	}
 
 	@Override
