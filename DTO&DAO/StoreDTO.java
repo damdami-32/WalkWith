@@ -14,9 +14,10 @@ public class StoreDTO {
 	private double sStarScore;
 	private String sDescription;
 	private int likeCount;  // 좋아요 수 필드 추가
+	private String sImage; // 가게 이미지 추가
 	
 	public StoreDTO(String sellerId, int storeId, String sName, String sPhone, Time sTime, String openDate, double sStarScore,
-			String sDescription, int likeCount) {
+			String sDescription, int likeCoun, String sImage) {
 		super();
 		this.sellerId = sellerId;
 		this.storeId = storeId;
@@ -27,6 +28,7 @@ public class StoreDTO {
 		this.sStarScore = sStarScore;
 		this.sDescription = sDescription;
 		this.likeCount = likeCount;  // 좋아요 수 초기화
+		this.sImage = sImage;
 	}
 
 	public String getSellerId() {
@@ -84,6 +86,15 @@ public class StoreDTO {
 	}
 	public void setLikeCount(int LikeCount) {
 		this.likeCount = likeCount;
+	}
+	
+	// 가게 이미지 추가
+	public String getsImage() {
+		return sImage;
+	}
+
+	public void setsImage(String sImage) {
+		this.sImage = sImage;
 	}
 
 	@Override
